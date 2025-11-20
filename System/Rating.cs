@@ -5,8 +5,10 @@ using System.Text;
 namespace FHTW.Swen1.Forum.System;
 
 public sealed class Rating: Atom, IAtom
-{
-    private string? _Owner = null;
+{   
+    private MediaEntry? _Entry = null;
+
+    private User? _Owner = null;
 
     private bool _New;
 
@@ -18,7 +20,7 @@ public sealed class Rating: Atom, IAtom
 
     private int? _AgeRestriction = null;
 
-    private string[]? _LikedBy = null;
+    private User[]? _LikedBy = null;
 
 
 

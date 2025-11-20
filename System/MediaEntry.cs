@@ -18,6 +18,10 @@ public sealed class MediaEntry: Atom, IAtom
 
     private string[]? _Genres = null;
 
+    private User? _Creator = null;
+
+    private Rating[]? _Ratings = null;
+
 
 
     public MediaEntry(Session? session = null)
