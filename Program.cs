@@ -1,2 +1,18 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using FHTW.Swen1.Forum.Handlers;
+using FHTW.Swen1.Forum.Server;
+
+namespace FHTW.Swen1.Forum;
+
+/// <summary>Program class.</summary>
+internal static class Program
+{
+    
+    /// <summary>Main entry point of the application.</summary>
+    /// <param name="args">Command line arguments.</param>
+    static void Main(string[] args)
+    {
+        HttpRestServer svr = new();
+        svr.RequestReceived += Handler.HandleEvent;
+        svr.Run();
+    }
+}
