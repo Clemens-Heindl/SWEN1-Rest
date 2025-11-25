@@ -32,7 +32,7 @@ public sealed class VersionHandler: Handler, IHandler
                 e.Respond(HttpStatusCode.BadRequest, new JsonObject(){ ["success"] = false, ["reason"] = "Invalid version endpoint." });
 
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"[{nameof(VersionHandler)} Invalid session endpoint.");
+                Console.WriteLine($"[{nameof(VersionHandler)} Invalid version endpoint.");
             }
 
             e.Responded = true;

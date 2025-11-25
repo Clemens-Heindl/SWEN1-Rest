@@ -19,7 +19,7 @@ public sealed class UserHandler: Handler, IHandler
     {
         if(e.Path.StartsWith("/users"))
         {
-            if((e.Path == "/users") && (e.Method == HttpMethod.Post))
+            if((e.Path == "/users/register") && (e.Method == HttpMethod.Post))
             {
                 try
                 {
@@ -43,6 +43,34 @@ public sealed class UserHandler: Handler, IHandler
                     Console.WriteLine($"[{nameof(VersionHandler)} Exception creating user. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
             }
+            else              
+            if((e.Path == "/users/login") && (e.Method == HttpMethod.Post))
+            {
+                try
+                {
+                    Session? session = Session.Create(e.Content["username"]?.GetValue<string>() ?? string.Empty, e.Content["password"]?.GetValue<string>() ?? string.Empty);
+
+                    if(session is null)
+                    {
+                        e.Respond(HttpStatusCode.Unauthorized, new JsonObject() { ["success"] = false, ["reason"] = "Invalid username or password." });
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"[{nameof(VersionHandler)} Invalid login attempt. {e.Method.ToString()} {e.Path}.");
+                    }
+                    else
+                    {
+                        e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["token"] = session.Token });
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine($"[{nameof(VersionHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                    }
+                }
+                catch(Exception ex)
+                {
+                    e.Respond(HttpStatusCode.InternalServerError, new JsonObject() { ["success"] = false, ["reason"] = ex.Message });
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"[{nameof(VersionHandler)} Exception creating session. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                }
+            }
+
             else
             {
                 e.Respond(HttpStatusCode.BadRequest, new JsonObject(){ ["success"] = false, ["reason"] = "Invalid user endpoint." });
