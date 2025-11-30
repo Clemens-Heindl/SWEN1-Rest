@@ -22,6 +22,7 @@ public sealed class UserHandler: Handler, IHandler
             if((e.Path == "/users/register") && (e.Method == HttpMethod.Post))
             {
                 try
+                
                 {
                     User user = new()
                     {

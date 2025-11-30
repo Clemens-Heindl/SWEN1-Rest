@@ -1,0 +1,20 @@
+curl -X POST http://localhost:12000/users/register \
+>>      -H "Content-Type: application/json" \
+>>      -d '{
+>>            "username": "Clemens",
+>>            "fullname": "Clemens Heindl",
+>>            "email": "clemens@example.com",
+>>            "password": "123"
+>>          }'
+
+
+curl -X POST http://localhost:12000/users/login \
+     -H "Content-Type: application/json" \
+     -d '{
+           "username": "Clemens",
+           "password": "123"
+         }'
+
+curl -X POST http://localhost:12000/users/invalidTest \
+     -H "Content-Type: application/json" \
+     -d '{}'
