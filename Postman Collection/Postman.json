@@ -89,6 +89,19 @@
 				"header": []
 			},
 			"response": []
+		},
+		{
+			"name": "New Request",
+			"id": "e52e93a6-4336-4a29-9387-54340c13ce59",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:12000/version"
+			},
+			"response": []
 		}
 	]
 }
