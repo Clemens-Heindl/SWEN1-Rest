@@ -18,8 +18,6 @@ public sealed class Rating: Atom, IAtom
 
     private int? _Stars = null;
 
-    private int? _AgeRestriction = null;
-
     private User[]? _LikedBy = null;
 
 
