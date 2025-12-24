@@ -2,12 +2,12 @@
 using System.Reflection;
 using System.Text.Json.Nodes;
 
-using FHTW.Swen1.Forum.System;
-using FHTW.Swen1.Forum.Server;
+using Clemens.SWEN1.System;
+using Clemens.SWEN1.Server;
 
 
 
-namespace FHTW.Swen1.Forum.Handlers;
+namespace Clemens.SWEN1.Handlers;
 
 /// <summary>This class implements a Handler for version endpoints.</summary>
 public sealed class VersionHandler: Handler, IHandler

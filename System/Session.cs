@@ -1,4 +1,4 @@
-﻿namespace FHTW.Swen1.Forum.System;
+﻿namespace Clemens.SWEN1.System;
 
 /// <summary>This class represents a session.</summary>
 public sealed class Session

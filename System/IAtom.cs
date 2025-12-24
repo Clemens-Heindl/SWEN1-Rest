@@ -1,4 +1,4 @@
-﻿namespace FHTW.Swen1.Forum.System;
+﻿namespace Clemens.SWEN1.System;
 
 /// <summary>Data objects implement this interface.</summary>
 public interface IAtom

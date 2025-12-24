@@ -2,11 +2,11 @@ using System.Net;
 using System.Text;
 using System.Text.Json.Nodes;
 
-using FHTW.Swen1.Forum.System;
+using Clemens.SWEN1.System;
 
 
 
-namespace FHTW.Swen1.Forum.Server;
+namespace Clemens.SWEN1.Server;
 
 /// <summary>This class defines event arguments for the <see cref="HttpRestServer.RequestReceived"/> event.</summary>
 public class HttpRestEventArgs: EventArgs

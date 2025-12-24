@@ -1,4 +1,4 @@
-﻿namespace FHTW.Swen1.Forum.System;
+﻿namespace Clemens.SWEN1.System;
 
 /// <summary>This class provides a base implementation for data objects.</summary>
 public abstract class Atom: IAtom

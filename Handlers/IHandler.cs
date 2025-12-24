@@ -1,8 +1,8 @@
-﻿using FHTW.Swen1.Forum.Server;
+﻿using Clemens.SWEN1.Server;
 
 
 
-namespace FHTW.Swen1.Forum.Handlers;
+namespace Clemens.SWEN1.Handlers;
 
 /// <summary>Classes capable of handling request implement this interface.</summary>
 public interface IHandler

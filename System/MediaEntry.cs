@@ -2,7 +2,7 @@ using System.Text;
 
 
 
-namespace FHTW.Swen1.Forum.System;
+namespace Clemens.SWEN1.System;
 
 public sealed class MediaEntry: Atom, IAtom
 {

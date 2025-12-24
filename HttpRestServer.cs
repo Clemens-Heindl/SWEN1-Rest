@@ -2,7 +2,7 @@ using System.Net;
 
 
 
-namespace FHTW.Swen1.Forum.Server;
+namespace Clemens.SWEN1.Server;
 
 public sealed class HttpRestServer: IDisposable
 {

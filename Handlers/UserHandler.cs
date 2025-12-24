@@ -1,12 +1,12 @@
 ﻿using System.Net;
 using System.Text.Json.Nodes;
 
-using FHTW.Swen1.Forum.System;
-using FHTW.Swen1.Forum.Server;
+using Clemens.SWEN1.System;
+using Clemens.SWEN1.Server;
 
 
 
-namespace FHTW.Swen1.Forum.Handlers;
+namespace Clemens.SWEN1.Handlers;
 
 /// <summary>This class implements a Handler for user endpoints.</summary>
 public sealed class UserHandler: Handler, IHandler
@@ -31,6 +31,7 @@ public sealed class UserHandler: Handler, IHandler
                         EMail = e.Content?["email"]?.GetValue<string>() ?? string.Empty
                     };
                     user.SetPassword(e.Content?["password"]?.GetValue<string>() ?? string.Empty);
+                    user.Save();
 
                     e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "User created." });
 

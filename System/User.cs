@@ -1,9 +1,11 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using System.Data.SQLite;
+using System.Collections;
+using System.Data;
+using Clemens.SWEN1.Database;
 
-
-
-namespace FHTW.Swen1.Forum.System;
+namespace Clemens.SWEN1.System;
 
 public sealed class User: Atom, IAtom
 {
@@ -13,8 +15,13 @@ public sealed class User: Atom, IAtom
 
     private string? _PasswordHash = null;
 
+    private static UserDatabase _Repository = new();
 
 
+    public User()
+    {
+        
+    }
     public User(Session? session = null)
     {
         _EditingSession = session;
@@ -56,6 +63,17 @@ public sealed class User: Atom, IAtom
         get; set;
     } = string.Empty;
 
+    public string PasswordHash
+    {
+        get;
+    } = string.Empty;
+
+    public bool isAdmin
+    {
+        get; set;
+    } = false;
+
+
 
     public string EMail
     {
@@ -72,7 +90,8 @@ public sealed class User: Atom, IAtom
     {
         if(!_New) { _EnsureAdminOrOwner(UserName); }
 
-        // TODO: save user to database
+        _Repository.Save(this);
+
         _PasswordHash = null;
         _EndEdit();
     }

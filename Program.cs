@@ -1,7 +1,7 @@
-﻿using FHTW.Swen1.Forum.Handlers;
-using FHTW.Swen1.Forum.Server;
+﻿using Clemens.SWEN1.Handlers;
+using Clemens.SWEN1.Server;
 
-namespace FHTW.Swen1.Forum;
+namespace Clemens.SWEN1;
 
 /// <summary>Program class.</summary>
 internal static class Program

@@ -1,10 +1,10 @@
 ﻿using System.Reflection;
 
-using FHTW.Swen1.Forum.Server;
+using Clemens.SWEN1.Server;
 
 
 
-namespace FHTW.Swen1.Forum.Handlers;
+namespace Clemens.SWEN1.Handlers;
 
 /// <summary>This class provides a base implementation of the <see cref="IHandler"/> interface and a static event handler for the <see cref="HttpRestServer.RequestReceived"/> event.</summary>
 public abstract class Handler: IHandler
