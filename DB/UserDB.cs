@@ -20,7 +20,7 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
     {
         obj.FullName = re.GetString("NAME");
         obj.EMail = re.GetString("EMAIL");
-        obj.isAdmin = re.GetBoolean("HADMIN");
+        obj.isAdmin = re.GetBool("HADMIN");
 
         return obj;
     }
@@ -82,9 +82,9 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
 
     public override void Save(User obj)
     {
-        if(((__IVerifiable) obj).__InternalID is null)
+        if(obj == null)
         {
-            if(string.IsNullOrWhiteSpace(obj.UserName))
+            if(string.IsNullOrWhiteSpace(obj?.UserName))
             {
                 throw new InvalidOperationException("User name must not be empty.");
             }
