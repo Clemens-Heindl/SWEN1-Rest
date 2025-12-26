@@ -12,29 +12,32 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
     protected override User _CreateObject(IDataReader re)
     {
         User rval = new();
+        while(re.Read()){
+            obj.UserName = re.GetString(0);
+        }
         return _RefreshObject(re, rval);
     }
 
 
     protected override User _RefreshObject(IDataReader re, User obj)
     {
-        obj.FullName = re.GetString("NAME");
-        obj.EMail = re.GetString("EMAIL");
-        obj.isAdmin = re.GetBool("HADMIN");
+
+        while(re.Read()){
+            obj.UserName = re.GetString(0);
+            obj.FullName = re.GetString(1);
+            obj.EMail = re.GetString(2);
+            obj.isAdmin = re.GetBoolean(3);
+        }
 
         return obj;
     }
     public override User? Get(string id, Session? session = null)
     {
-        using IDbCommand cmd = _Cn.CreateCommand();
-        cmd.CommandText = "SELECT USERNAME, NAME, EMAIL, HADMIN FROM USERS WHERE USERNAME = :u";
-        cmd.BindParam(":u", id);
-
-        using IDataReader re = cmd.ExecuteReader();
-        if(re.Read())
-        {
-            return _CreateObject(re);
-        }
+        var sql = "SELECT USERNAME, NAME, EMAIL, HADMIN FROM USERS WHERE USERNAME = @u";
+        using var cmd = new NpgsqlCommand(sql, _Cn);
+        using var reader = cmd.ExecuteReader();
+        cmd.Parameters.AddWithValue("u", id);
+        return _CreateObject(reader);
 
         return null;
     }
@@ -42,13 +45,12 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
 
     public override IEnumerable<User> GetAll(Session? session = null)
     {
-        using IDbCommand cmd = _Cn.CreateCommand();
-        cmd.CommandText = "SELECT USERNAME, NAME, EMAIL, HADMIN FROM USERS";
+        var sql = "SELECT USERNAME, NAME, EMAIL, HADMIN FROM USERS";
+        using var cmd = new NpgsqlCommand(sql, _Cn);
+        using var reader = cmd.ExecuteReader();
 
         List<User> rval = new List<User>();
-
-        using IDataReader re = cmd.ExecuteReader();
-        while(re.Read())
+        while(reader.Read())
         {
             rval.Add(_CreateObject(re));
         }
@@ -59,23 +61,21 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
 
     public override void Refresh(User obj)
     {
-        using IDbCommand cmd = _Cn.CreateCommand();
-        cmd.CommandText = "SELECT NAME, EMAIL, HADMIN FROM USERS WHERE USERNAME = :u";
-        cmd.BindParam(":u", obj.UserName);
+        var sql = "SELECT USERNAME, NAME, EMAIL, HADMIN FROM USERS WHERE USERNAME = @u";
+        using var cmd = new NpgsqlCommand(sql, _Cn);
+        using var reader = cmd.ExecuteReader();
+        cmd.Parameters.AddWithValue("u", id);
+        return _RefreshObject(reader);
 
-        using IDataReader re = cmd.ExecuteReader();
-        if(re.Read())
-        {
-            _RefreshObject(re, obj);
-        }
     }
 
 
     public override void Delete(User obj)
     {
-        using IDbCommand cmd = _Cn.CreateCommand();
-        cmd.CommandText = "DELETE FROM USERS WHERE USERNAME = :u";
-        cmd.BindParam(":u", obj.UserName);
+
+        String sql = "DELETE FROM USERS WHERE USERNAME = @u";
+        using var cmd = new NpgsqlCommand(sql, _Cn);
+        cmd.Parameters.AddWithValue("u", obj.UserName);
         cmd.ExecuteNonQuery();
     }
 
@@ -93,27 +93,20 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
                 throw new InvalidOperationException("Password must not be empty.");
             }
 
-            using IDbCommand cmd = _Cn.CreateCommand();
-            cmd.CommandText = "INSERT INTO USERS (USERNAME, NAME, PASSWD, EMAIL, HADMIN) " +
-                              "VALUES (:u, :n, :p, :e, :a)";
-            cmd.BindParam(":u", obj.UserName)
-               .BindParam(":n", obj.FullName)
-               .BindParam(":p", obj.PasswordHash)
-               .BindParam(":e", obj.EMail)
-               .BindParam(":a", obj.isAdmin);
+            String sql = "INSERT INTO USERS (USERNAME, NAME, PASSWD, EMAIL, HADMIN) VALUES (@u, @n, @p, @e, @a)";
+            using var cmd = new NpgsqlCommand(sql, _Cn);
+            cmd.Parameters.AddWithValue("u", obj.UserName);
+            cmd.Parameters.AddWithValue("n", obj.FullName);
+            cmd.Parameters.AddWithValue("p", obj.PasswordHash);
+            cmd.Parameters.AddWithValue("e", obj.EMail);
+            cmd.Parameters.AddWithValue("a", obj.isAdmin);
             cmd.ExecuteNonQuery();
+
+
         }
         else
         {
-            string pwd = string.IsNullOrWhiteSpace(obj.PasswordHash) ?
-                         string.Empty : "PASSWD = :p, ";
-            using IDbCommand cmd = _Cn.CreateCommand();
-            cmd.CommandText = $"UPDATE USERS SET NAME ? :n, {pwd}EMAIL = :e, HADMIN = :a " +
-                              "WHERE USERNAME = :u";
-            cmd.BindParam(":n", obj.FullName);
-            if(!string.IsNullOrWhiteSpace(pwd)) { cmd.BindParam(":p", obj.PasswordHash); }
-            cmd.BindParam(":e", obj.EMail).BindParam(":a", obj.isAdmin).BindParam(":u", obj.UserName);
-            cmd.ExecuteNonQuery();
+            throw new InvalidOperationException("User must not be null.");
         }
     }
 }

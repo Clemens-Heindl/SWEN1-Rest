@@ -17,8 +17,9 @@ public abstract class Database<T>: IDatabase<T> where T: IAtom, new()
         get
         {
             if(_DbConnection == null) 
-            {
-                _DbConnection = new SQLiteConnection("Data Source=forum.db; Version=3;");
+            {   
+                var conectionString =  "Host=localhost;Port=5432;Username=postgres;Password=mysecretpassword;Database=postgres";
+                _DbConnection = new NpgsqlConnection(conectionString);
                 _DbConnection.Open();
             }
 
