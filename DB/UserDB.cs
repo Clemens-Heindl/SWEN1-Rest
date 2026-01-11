@@ -25,7 +25,6 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
             obj.EMail = re.GetString(2);
             obj.isAdmin = re.GetBoolean(3);
         }
-        Console.WriteLine(obj);
         return obj;
     }
     public override User? Get(string id, Session? session = null)

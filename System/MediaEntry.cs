@@ -12,11 +12,27 @@ public sealed class MediaEntry: Atom, IAtom
 
     private Rating[]? _Ratings = null;
 
+    private static MediaDatabase _Repository = new();
+
+    public MediaEntry? Get(string id, Session? session = null)
+    {
+        return _Repository.Get(id, session);
+        
+    }
+
+    public int ID {
+        get; set;
+    };
+
     public string MediaType {
         get; set;
     } = string.Empty;
 
     public string Title {
+        get; set;
+    } = string.Empty;
+
+    public string Description {
         get; set;
     } = string.Empty;
 
@@ -32,7 +48,10 @@ public sealed class MediaEntry: Atom, IAtom
         get; set;
     } = [];
 
-
+    public MediaEntry()
+    {
+        _New = true;
+    }
 
     public MediaEntry(Session? session = null)
     {
@@ -56,6 +75,7 @@ public sealed class MediaEntry: Atom, IAtom
     public override void Save()
     {
         if(!_New) { _EnsureAdminOrOwner(Creator); }
+        _Repository.Save(this );
         _EndEdit();
     }
 

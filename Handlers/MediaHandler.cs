@@ -24,8 +24,11 @@ public sealed class MediaHandler: Handler, IHandler
                 try
                 
                 {
+                    string? authHeader = Request.Headers["Authorization"];
+                    Session? session = verifyToken(authHeader);
                     MediaEntry entry = new()
                     {
+                        Creates = session.UserName,
                         MediaType= e.Content?["type"]?.GetValue<string>() ?? string.Empty,
                         Title = e.Content?["title"]?.GetValue<string>() ?? string.Empty,
                         ReleaseYear = e.Content?["release"]?.GetValue<int>() ?? 0,

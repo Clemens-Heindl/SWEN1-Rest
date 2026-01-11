@@ -86,7 +86,14 @@ public sealed class Session
         s.Hash = _HashPassword(userName, password);
         User? user = new();
         user = user.Get(userName, s);
-        if (user != null) { return s; }
+        if (user != null)
+        {
+            lock (_Sessions)
+            {
+                _Sessions[s.Token] = s;
+            }
+            return s;
+        }
         return null;
         
     }
