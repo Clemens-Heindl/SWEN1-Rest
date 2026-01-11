@@ -101,6 +101,7 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
             cmd.Parameters.AddWithValue("e", obj.EMail);
             cmd.Parameters.AddWithValue("a", obj.isAdmin);
             cmd.ExecuteNonQuery();
+            Console.WriteLine("User saved successfully!");
 
 
         }

@@ -21,6 +21,7 @@ public abstract class Database<T>: IDatabase<T> where T: IAtom, new()
                 var conectionString =  "Host=localhost;Port=5432;Username=postgres;Password=mysecretpassword;Database=postgres";
                 _DbConnection = new NpgsqlConnection(conectionString);
                 _DbConnection.Open();
+                Console.WriteLine("Connected to PostgreSQL!");
             }
 
             return _DbConnection;
