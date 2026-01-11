@@ -31,14 +31,14 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"username\": \"Clemens\",\n    \"password\": \"123\"\n}",
+					"raw": "{\n\t\"username\": \"Clemens\",\n    \"password\": \"13\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "",
+				"url": "http://localhost:12000/users/login",
 				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
 			},
 			"response": []
