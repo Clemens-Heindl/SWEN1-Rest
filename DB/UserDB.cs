@@ -12,9 +12,6 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
     protected override User _CreateObject(IDataReader re)
     {
         User rval = new();
-        while(re.Read()){
-            obj.UserName = re.GetString(0);
-        }
         return _RefreshObject(re, rval);
     }
 
@@ -22,7 +19,7 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
     protected override User _RefreshObject(IDataReader re, User obj)
     {
 
-        while(re.Read()){
+        if(re.Read()){
             obj.UserName = re.GetString(0);
             obj.FullName = re.GetString(1);
             obj.EMail = re.GetString(2);
@@ -35,8 +32,8 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
     {
         var sql = "SELECT USERNAME, NAME, EMAIL, HADMIN FROM USERS WHERE USERNAME = @u";
         using var cmd = new NpgsqlCommand(sql, _Cn);
-        using var reader = cmd.ExecuteReader();
         cmd.Parameters.AddWithValue("u", id);
+        using var reader = cmd.ExecuteReader();
         return _CreateObject(reader);
 
         return null;
@@ -52,7 +49,7 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
         List<User> rval = new List<User>();
         while(reader.Read())
         {
-            rval.Add(_CreateObject(re));
+            rval.Add(_CreateObject(reader));
         }
 
         return rval;
@@ -63,9 +60,9 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
     {
         var sql = "SELECT USERNAME, NAME, EMAIL, HADMIN FROM USERS WHERE USERNAME = @u";
         using var cmd = new NpgsqlCommand(sql, _Cn);
+        cmd.Parameters.AddWithValue("u", obj.UserName);
         using var reader = cmd.ExecuteReader();
-        cmd.Parameters.AddWithValue("u", id);
-        return _RefreshObject(reader);
+        return _RefreshObject(reader, obj);
 
     }
 
@@ -82,7 +79,8 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
 
     public override void Save(User obj)
     {
-        if(obj == null)
+        Console.WriteLine($"Save called, New={_New}");
+        if(obj != null)
         {
             if(string.IsNullOrWhiteSpace(obj?.UserName))
             {

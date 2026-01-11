@@ -17,11 +17,6 @@ public sealed class User: Atom, IAtom
 
     private static UserDatabase _Repository = new();
 
-
-    public User()
-    {
-        
-    }
     public User(Session? session = null)
     {
         _EditingSession = session;
@@ -65,8 +60,8 @@ public sealed class User: Atom, IAtom
 
     public string PasswordHash
     {
-        get;
-    } = string.Empty;
+        get => _PasswordHash ?? string.Empty;
+    }
 
     public bool isAdmin
     {
