@@ -1,6 +1,5 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using System.Data.SQLite;
 using System.Collections;
 using System.Data;
 using Clemens.SWEN1.Database;
@@ -22,12 +21,16 @@ public sealed class User: Atom, IAtom
         _EditingSession = session;
         _New = true;
     }
-
-
-    public static User Get(string userName, Session? session = null)
+    public User()
     {
-        // TODO: load user and return if admin or owner.
-        throw new NotImplementedException();
+        _New = true;
+    }
+
+
+    public User? Get(string userName, Session? session = null)
+    {
+        return _Repository.Get(userName, session);
+        
     }
 
 

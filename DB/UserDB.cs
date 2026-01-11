@@ -1,5 +1,5 @@
 using System.Data;
-using System.Data.SQLite;
+using Npgsql;
 using Clemens.SWEN1.System;
 
 namespace Clemens.SWEN1.Database;
@@ -18,7 +18,6 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
 
     protected override User _RefreshObject(IDataReader re, User obj)
     {
-
         if(re.Read()){
             obj.UserName = re.GetString(0);
             obj.FullName = re.GetString(1);
@@ -29,14 +28,16 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
         return obj;
     }
     public override User? Get(string id, Session? session = null)
-    {
-        var sql = "SELECT USERNAME, NAME, EMAIL, HADMIN FROM USERS WHERE USERNAME = @u";
+    {   
+        if(session ==  null) return null;
+        var sql = "SELECT USERNAME, NAME, EMAIL, HADMIN FROM USERS WHERE USERNAME = @u AND PASSWD = @p";
         using var cmd = new NpgsqlCommand(sql, _Cn);
-        cmd.Parameters.AddWithValue("u", id);
+        cmd.Parameters.AddWithValue("u", id); 
+        cmd.Parameters.AddWithValue("u", session.Hash);
         using var reader = cmd.ExecuteReader();
         return _CreateObject(reader);
 
-        return null;
+        
     }
 
 
@@ -62,7 +63,7 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
         using var cmd = new NpgsqlCommand(sql, _Cn);
         cmd.Parameters.AddWithValue("u", obj.UserName);
         using var reader = cmd.ExecuteReader();
-        return _RefreshObject(reader, obj);
+        _RefreshObject(reader, obj);
 
     }
 
@@ -79,7 +80,6 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
 
     public override void Save(User obj)
     {
-        Console.WriteLine($"Save called, New={_New}");
         if(obj != null)
         {
             if(string.IsNullOrWhiteSpace(obj?.UserName))

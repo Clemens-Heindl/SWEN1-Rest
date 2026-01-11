@@ -1,4 +1,7 @@
-﻿namespace Clemens.SWEN1.System;
+﻿using System.Text;
+using System.Security.Cryptography;
+
+namespace Clemens.SWEN1.System;
 
 /// <summary>This class represents a session.</summary>
 public sealed class Session
@@ -41,6 +44,8 @@ public sealed class Session
     /// <summary>Gets the user name of the session owner.</summary>
     public string UserName { get; }
 
+    public string Hash { get; set; }
+
 
     /// <summary>Gets the session timestamp.</summary>
     public DateTime Timestamp
@@ -59,15 +64,37 @@ public sealed class Session
     /// <summary>Gets a value indicating if the session owner has administrative privileges.</summary>
     public bool IsAdmin { get; }
 
+    internal static string _HashPassword(string userName, string password)
+    {
+        StringBuilder rval = new();
+        foreach (byte i in SHA256.HashData(Encoding.UTF8.GetBytes(userName + password)))
+        {
+            rval.Append(i.ToString("x2"));
+        }
+        return rval.ToString();
+    }
 
-    
+
+
     /// <summary>Creates a new session.</summary>
     /// <param name="userName">User name.</param>
     /// <param name="password">Password.</param>
     /// <returns>Returns a session instance, or NULL if user couldn't be logged in.</returns>
     public static Session? Create(string userName, string password)
-    {
-        return new Session(userName, password);
+    {   
+        Session s = new Session(userName, password);
+        s.Hash = _HashPassword(userName, password);
+        bool isRegistered = false;
+        User user = new();
+        user.Get(userName, s);
+        if (isRegistered)
+        {
+            return s;
+        } else
+        {
+            return null;
+        }
+        
     }
 
 

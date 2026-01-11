@@ -9,7 +9,7 @@ using Clemens.SWEN1.Server;
 namespace Clemens.SWEN1.Handlers;
 
 /// <summary>This class implements a Handler for media entry endpoints.</summary>
-public sealed class MediaHandler: Handler, IHandler
+public sealed class RatingHandler: Handler, IHandler
 {
 
     
@@ -26,21 +26,20 @@ public sealed class MediaHandler: Handler, IHandler
                 {
                     Rating rating = new()
                     {
-                        MediaType= e.Content?["comment"]?.GetValue<string>() ?? string.Empty,
-                        ReleaseYear = e.Content?["stars"]?.GetValue<int>() ?? 0,
-                        Owner = 
+                        Comment = e.Content?["comment"]?.GetValue<string>() ?? string.Empty,
+                        Stars = e.Content?["stars"]?.GetValue<int>() ?? 0,
                     };
 
                     e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "Rating created." });
 
                     Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine($"[{nameof(VersionHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                    Console.WriteLine($"[{nameof(RatingHandler)} Handled {e.Method.ToString()} {e.Path}.");
                 }
                 catch(Exception ex)
                 {
                     e.Respond(HttpStatusCode.InternalServerError, new JsonObject(){ ["success"] = false, ["reason"] = ex.Message });
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"[{nameof(VersionHandler)} Exception creating rating. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                    Console.WriteLine($"[{nameof(RatingHandler)} Exception creating rating. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
             }
             else 
@@ -54,20 +53,20 @@ public sealed class MediaHandler: Handler, IHandler
                     {
                         e.Respond(HttpStatusCode.Unauthorized, new JsonObject() { ["success"] = false, ["reason"] = "Invalid username or password." });
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"[{nameof(VersionHandler)} Invalid login attempt. {e.Method.ToString()} {e.Path}.");
+                        Console.WriteLine($"[{nameof(RatingHandler)} Invalid login attempt. {e.Method.ToString()} {e.Path}.");
                     }
                     else
                     {
                         e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["token"] = session.Token });
                         Console.ForegroundColor = ConsoleColor.Blue;
-                        Console.WriteLine($"[{nameof(VersionHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                        Console.WriteLine($"[{nameof(RatingHandler)} Handled {e.Method.ToString()} {e.Path}.");
                     }
                 }
                 catch(Exception ex)
                 {
                     e.Respond(HttpStatusCode.InternalServerError, new JsonObject() { ["success"] = false, ["reason"] = ex.Message });
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"[{nameof(VersionHandler)} Exception creating session. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                    Console.WriteLine($"[{nameof(RatingHandler)} Exception creating session. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
             }
 
@@ -76,7 +75,7 @@ public sealed class MediaHandler: Handler, IHandler
                 e.Respond(HttpStatusCode.BadRequest, new JsonObject(){ ["success"] = false, ["reason"] = "Invalid media entry endpoint." });
 
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"[{nameof(VersionHandler)} Invalid ratings endpoint.");
+                Console.WriteLine($"[{nameof(RatingHandler)} Invalid ratings endpoint.");
             }
 
             e.Responded = true;

@@ -17,13 +17,14 @@ public sealed class UserHandler: Handler, IHandler
     /// <param name="e">Event arguments.</param>
     public override void Handle(HttpRestEventArgs e)
     {
-        if(e.Path.StartsWith("/users"))
+        if (e.Path.StartsWith("/users"))
         {
             if((e.Path == "/users/register") && (e.Method == HttpMethod.Post))
             {
                 try
                 
                 {
+
                     User user = new()
                     {
                         UserName = e.Content?["username"]?.GetValue<string>() ?? string.Empty,
@@ -36,13 +37,13 @@ public sealed class UserHandler: Handler, IHandler
                     e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "User created." });
 
                     Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine($"[{nameof(VersionHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                    Console.WriteLine($"[{nameof(UserHandler)} Handled {e.Method.ToString()} {e.Path}.");
                 }
                 catch(Exception ex)
                 {
                     e.Respond(HttpStatusCode.InternalServerError, new JsonObject(){ ["success"] = false, ["reason"] = ex.Message });
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"[{nameof(VersionHandler)} Exception creating user. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                    Console.WriteLine($"[{nameof(UserHandler)} Exception creating user. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
             }
             else              
@@ -56,20 +57,20 @@ public sealed class UserHandler: Handler, IHandler
                     {
                         e.Respond(HttpStatusCode.Unauthorized, new JsonObject() { ["success"] = false, ["reason"] = "Invalid username or password." });
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"[{nameof(VersionHandler)} Invalid login attempt. {e.Method.ToString()} {e.Path}.");
+                        Console.WriteLine($"[{nameof(UserHandler)} Invalid login attempt. {e.Method.ToString()} {e.Path}.");
                     }
                     else
                     {
                         e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["token"] = session.Token });
                         Console.ForegroundColor = ConsoleColor.Blue;
-                        Console.WriteLine($"[{nameof(VersionHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                        Console.WriteLine($"[{nameof(UserHandler)} Handled {e.Method.ToString()} {e.Path}.");
                     }
                 }
                 catch(Exception ex)
                 {
                     e.Respond(HttpStatusCode.InternalServerError, new JsonObject() { ["success"] = false, ["reason"] = ex.Message });
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"[{nameof(VersionHandler)} Exception creating session. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                    Console.WriteLine($"[{nameof(UserHandler)} Exception creating session. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
             }
 
@@ -78,7 +79,7 @@ public sealed class UserHandler: Handler, IHandler
                 e.Respond(HttpStatusCode.BadRequest, new JsonObject(){ ["success"] = false, ["reason"] = "Invalid user endpoint." });
 
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"[{nameof(VersionHandler)} Invalid user endpoint.");
+                Console.WriteLine($"[{nameof(UserHandler)} Invalid user endpoint.");
             }
 
             e.Responded = true;

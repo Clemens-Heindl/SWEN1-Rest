@@ -1,4 +1,5 @@
 using System.Text;
+using Clemens.SWEN1.System;
 
 
 
@@ -8,7 +9,7 @@ public sealed class Rating: Atom, IAtom
 {   
     private MediaEntry? _Entry = null;
 
-    private string _Owner = string.empty;
+    private string _Owner = string.Empty;
 
     private bool _New;
 
@@ -16,7 +17,7 @@ public sealed class Rating: Atom, IAtom
 
     public string Comment {
         get; set;
-    } = string.empty;
+    } = string.Empty;
 
     public int Stars {
         get; set;
@@ -50,7 +51,7 @@ public sealed class Rating: Atom, IAtom
         set 
         {
             if(!_New) { throw new InvalidOperationException("Owner cannot be changed."); }
-            if(string.IsNullOrWhiteSpace(value.title)) { throw new ArgumentException("Title of media entry must not be empty."); }
+            if(string.IsNullOrWhiteSpace(value.Title)) { throw new ArgumentException("Title of media entry must not be empty."); }
             
             _Entry = value; 
         }

@@ -1,4 +1,4 @@
-using System.Text;
+using System;
 
 
 
@@ -8,17 +8,17 @@ public sealed class MediaEntry: Atom, IAtom
 {
     private bool _New;
 
-    private string _Creator = string.empty;
+    private string _Creator = string.Empty;
 
     private Rating[]? _Ratings = null;
 
     public string MediaType {
         get; set;
-    } = string.empty;
+    } = string.Empty;
 
     public string Title {
         get; set;
-    } = string.empty;
+    } = string.Empty;
 
     public int ReleaseYear {
         get; set;

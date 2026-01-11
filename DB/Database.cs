@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Data;
-using System.Data.SQLite;
+using Npgsql;
 
 using Clemens.SWEN1.System;
 
@@ -9,10 +9,10 @@ namespace Clemens.SWEN1.Database;
 
 public abstract class Database<T>: IDatabase<T> where T: IAtom, new()
 {
-    private static IDbConnection? _DbConnection;
+    private static NpgsqlConnection? _DbConnection;
     
 
-    protected static IDbConnection _Cn
+    protected static NpgsqlConnection _Cn
     {
         get
         {
