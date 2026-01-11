@@ -1,6 +1,7 @@
 using System.Data;
 using Npgsql;
 using Clemens.SWEN1.System;
+using System.Diagnostics.Tracing;
 
 namespace Clemens.SWEN1.Database;
 
@@ -24,7 +25,7 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
             obj.EMail = re.GetString(2);
             obj.isAdmin = re.GetBoolean(3);
         }
-
+        Console.WriteLine(obj);
         return obj;
     }
     public override User? Get(string id, Session? session = null)
@@ -33,8 +34,13 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
         var sql = "SELECT USERNAME, NAME, EMAIL, HADMIN FROM USERS WHERE USERNAME = @u AND PASSWD = @p";
         using var cmd = new NpgsqlCommand(sql, _Cn);
         cmd.Parameters.AddWithValue("u", id); 
-        cmd.Parameters.AddWithValue("u", session.Hash);
+        cmd.Parameters.AddWithValue("p", session.Hash);
         using var reader = cmd.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            Console.WriteLine("Invalid Password");
+            return null;
+        }
         return _CreateObject(reader);
 
         

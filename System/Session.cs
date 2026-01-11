@@ -84,16 +84,10 @@ public sealed class Session
     {   
         Session s = new Session(userName, password);
         s.Hash = _HashPassword(userName, password);
-        bool isRegistered = false;
-        User user = new();
-        user.Get(userName, s);
-        if (isRegistered)
-        {
-            return s;
-        } else
-        {
-            return null;
-        }
+        User? user = new();
+        user = user.Get(userName, s);
+        if (user != null) { return s; }
+        return null;
         
     }
 
