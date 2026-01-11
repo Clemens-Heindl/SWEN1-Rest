@@ -13,7 +13,9 @@ public sealed class Rating: Atom, IAtom
 
     private bool _New;
 
-    private bool _Confirmation = false;
+    public bool _Confirmation{
+        get; set;
+    } = false;
 
     public string Comment {
         get; set;
@@ -26,10 +28,20 @@ public sealed class Rating: Atom, IAtom
     private User[]? _LikedBy = null;
 
 
+    private static RatingDatabase _Repository = new();
 
+    public Rating? Get(string id, Session? session = null)
+    {
+        return _Repository.Get(id, session);
+        
+    }
     public Rating(Session? session = null)
     {
         _EditingSession = session;
+        _New = true;
+    }
+    public Rating()
+    {
         _New = true;
     }
 
@@ -50,7 +62,7 @@ public sealed class Rating: Atom, IAtom
         get { return _Entry; }
         set 
         {
-            if(!_New) { throw new InvalidOperationException("Owner cannot be changed."); }
+            if(!_New) { throw new InvalidOperationException("Entry cannot be changed."); }
             if(string.IsNullOrWhiteSpace(value.Title)) { throw new ArgumentException("Title of media entry must not be empty."); }
             
             _Entry = value; 
@@ -60,6 +72,7 @@ public sealed class Rating: Atom, IAtom
     public override void Save()
     {
         if(!_New) { _EnsureAdminOrOwner(Owner); }
+        _Repository.Save(this );
         _EndEdit();
     }
 

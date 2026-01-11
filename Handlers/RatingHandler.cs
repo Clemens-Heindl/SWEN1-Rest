@@ -24,12 +24,15 @@ public sealed class RatingHandler: Handler, IHandler
                 try
                 
                 {
+                    string? authHeader = Request.Headers["Authorization"];
+                    Session? session = verifyToken(authHeader);
                     Rating rating = new()
                     {
+                        owner = session.UserName;
                         Comment = e.Content?["comment"]?.GetValue<string>() ?? string.Empty,
                         Stars = e.Content?["stars"]?.GetValue<int>() ?? 0,
                     };
-
+                    rating.Save();
                     e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "Rating created." });
 
                     Console.ForegroundColor = ConsoleColor.Blue;

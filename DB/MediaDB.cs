@@ -93,10 +93,10 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
                 throw new InvalidOperationException("MediaEntry name must not be empty.");
             }
 
-            String sql = "INSERT INTO MEDIA (CREATOR, TITLE, MEDIATYPE, DESCRIPTION, RELEASEYEAR, AGERESTRICTION) VALUES (@u, @n, @p, @e, @a)";
+            String sql = "INSERT INTO MEDIA (CREATOR, TITLE, MEDIATYPE, DESCRIPTION, RELEASEYEAR, AGERESTRICTION) VALUES (@u, @t, @n, @p, @e, @a)";
             using var cmd = new NpgsqlCommand(sql, _Cn);
             cmd.Parameters.AddWithValue("u", obj.Creator);
-            cmd.Parameters.AddWithValue("u", obj.Title);
+            cmd.Parameters.AddWithValue("t", obj.Title);
             cmd.Parameters.AddWithValue("n", obj.MediaType);
             cmd.Parameters.AddWithValue("p", obj.Description);
             cmd.Parameters.AddWithValue("e", obj.ReleaseYear);

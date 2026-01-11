@@ -28,13 +28,14 @@ public sealed class MediaHandler: Handler, IHandler
                     Session? session = verifyToken(authHeader);
                     MediaEntry entry = new()
                     {
-                        Creates = session.UserName,
+                        Creator = session.UserName,
                         MediaType= e.Content?["type"]?.GetValue<string>() ?? string.Empty,
                         Title = e.Content?["title"]?.GetValue<string>() ?? string.Empty,
                         ReleaseYear = e.Content?["release"]?.GetValue<int>() ?? 0,
                         AgeRestriction = e.Content?["restriction"]?.GetValue<int>() ?? 0,
                         Genres = e.Content?["genres"]?.GetValue<string[]>() ?? [],
                     };
+                    entry.Save();
 
                     e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "Media Entry created." });
 
