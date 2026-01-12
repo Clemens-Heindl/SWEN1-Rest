@@ -298,6 +298,29 @@
 				"url": "http://localhost:12000/media"
 			},
 			"response": []
+		},
+		{
+			"name": "Get Media Avg Rating",
+			"id": "2fd24e3b-07db-421a-b3e3-fe959cf8a9e2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 2\r\n}"
+				},
+				"url": "http://localhost:12000/media/rating"
+			},
+			"response": []
 		}
 	]
 }
