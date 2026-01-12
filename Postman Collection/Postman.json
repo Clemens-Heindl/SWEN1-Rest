@@ -155,6 +155,29 @@
 				"url": "http://localhost:12000/media"
 			},
 			"response": []
+		},
+		{
+			"name": "New Request",
+			"id": "4b0e9f78-da69-49c5-b33e-538a4063f776",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 2,\r\n    \"type\": \"Movie\",\r\n    \"title\": \"A Minecraft Movie\",\r\n    \"release\": 2025,\r\n    \"restriction\": 6,\r\n    \"genre\": \"Adventure\",\r\n    \"description\": \"The movie with jack black, jason momoa, emma myers and many more\"\r\n}"
+				},
+				"url": "http://localhost:12000/media"
+			},
+			"response": []
 		}
 	]
 }
