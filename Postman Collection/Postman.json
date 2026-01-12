@@ -321,6 +321,29 @@
 				"url": "http://localhost:12000/media/ratings"
 			},
 			"response": []
+		},
+		{
+			"name": "Leaderboard",
+			"id": "e8f14fb4-33e1-469b-9afa-d8eb1bce7a7e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://localhost:12000/users/leaderboard"
+			},
+			"response": []
 		}
 	]
 }
