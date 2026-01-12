@@ -178,6 +178,29 @@
 				"url": "http://localhost:12000/media"
 			},
 			"response": []
+		},
+		{
+			"name": "New Rating",
+			"id": "a7284c33-e1fa-4133-a335-13a2275b019b",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"entry\": 2,\n    \"comment\": \"really enjoyable\",\n    \"stars\":5\n}"
+				},
+				"url": "http://localhost:12000/ratings"
+			},
+			"response": []
 		}
 	]
 }
