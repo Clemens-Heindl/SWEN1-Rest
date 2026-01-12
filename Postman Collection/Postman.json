@@ -270,6 +270,80 @@
 				"url": "http://localhost:12000/ratings/confirm"
 			},
 			"response": []
+		},
+		{
+			"name": "Search/Filter Media",
+			"id": "6325bc4b-9e3f-41c8-8561-ba3e7c6c30fa",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"filter\": \"title\",\r\n    \"keyword\": \"Minecraft\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:12000/media"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Media Avg Rating",
+			"id": "2fd24e3b-07db-421a-b3e3-fe959cf8a9e2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 2\r\n}"
+				},
+				"url": "http://localhost:12000/media/ratings"
+			},
+			"response": []
+		},
+		{
+			"name": "Leaderboard",
+			"id": "e8f14fb4-33e1-469b-9afa-d8eb1bce7a7e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://localhost:12000/users/leaderboard"
+			},
+			"response": []
 		}
 	]
 }
