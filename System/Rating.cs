@@ -21,9 +21,13 @@ public sealed class Rating: Atom, IAtom
         get; set;
     } = string.Empty;
 
-    public int Stars {
-        get; set;
-    } = 0;
+    private int _stars = 0;
+
+    public int Stars
+    {
+        get => _stars;
+        set => _stars = Math.Clamp(value, 0, 5);
+    }
 
     public int ID
     {
@@ -34,6 +38,11 @@ public sealed class Rating: Atom, IAtom
 
 
     private static RatingDatabase _Repository = new();
+
+    public static RatingDatabase Repo
+    {
+        get { return _Repository; }
+    }
 
     public static Rating? Get(int id, Session? session = null)
     {
@@ -68,7 +77,6 @@ public sealed class Rating: Atom, IAtom
         set 
         {
             if(!_New) { throw new InvalidOperationException("Entry cannot be changed."); }
-            if(string.IsNullOrWhiteSpace(value.Title)) { throw new ArgumentException("Title of media entry must not be empty."); }
             
             _Entry = value; 
         }
@@ -90,6 +98,11 @@ public sealed class Rating: Atom, IAtom
 
     public override void Refresh()
     {
-        _EndEdit();
+        _Repository.Refresh(this);
+    }
+
+    public bool Exists()
+    {
+        return _Repository.Exists(this);
     }
 }

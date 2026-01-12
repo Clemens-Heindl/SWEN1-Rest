@@ -22,8 +22,8 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
         if(re.Read()){
             obj.Owner = re.GetString(0);
             obj.Comment = re.GetString(1);
-            obj.Stars = re.GetInt32(3);
-            obj.Entry = MediaEntry.Get(re.GetInt32(4));
+            obj.Stars = re.GetInt32(2);
+            obj.Entry = MediaEntry.Get(re.GetInt32(3));
         }
         return obj;
     }
@@ -93,7 +93,7 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
             cmd.Parameters.AddWithValue("n", obj.Comment);
             cmd.Parameters.AddWithValue("p", obj._Confirmation);
             cmd.Parameters.AddWithValue("e", obj.Stars);
-            cmd.Parameters.AddWithValue("a", obj.Entry);
+            cmd.Parameters.AddWithValue("a", obj.Entry.ID);
             cmd.ExecuteNonQuery();
             Console.WriteLine("Rating saved successfully!");
 
@@ -125,5 +125,15 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
         {
             throw new InvalidOperationException("Rating must not be null.");
         }
+    }
+
+    public bool Exists(Rating obj)
+    {
+        var sql = "SELECT COMMENT, STARS FROM RATINGS WHERE OWNER = @u AND ENTRY = @e";
+        using var cmd = new NpgsqlCommand(sql, _Cn);
+        cmd.Parameters.AddWithValue("u", obj.Owner);
+        cmd.Parameters.AddWithValue("e", obj.Entry.ID);
+        using var reader = cmd.ExecuteReader();
+        return (reader.HasRows);
     }
 }
