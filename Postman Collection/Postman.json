@@ -113,19 +113,42 @@
 				"auth": {
 					"type": "bearer",
 					"bearer": {
-						"token": "xOBwYEUChON0oynKXxk7r41W"
+						"token": "ducyOipOQU7XRG9FGMPTGyl2"
 					}
 				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"type\": \"Game\",\r\n    \"title\": \"Minecraft\",\r\n    \"release\": 2009,\r\n    \"restriction\": 6,\r\n    \"genre\": \"Adventure\"\r\n}",
+					"raw": "{\r\n    \"type\": \"Game\",\r\n    \"title\": \"Minecraft\",\r\n    \"release\": 2009,\r\n    \"restriction\": 6,\r\n    \"genre\": \"Adventure\",\r\n    \"description\": \"The worlds greatest sandbox game\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
+				},
+				"url": "http://localhost:12000/media"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Media Entry",
+			"id": "dc27b758-d900-4197-844d-e0cbe7e85ed2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "ducyOipOQU7XRG9FGMPTGyl2"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1\r\n}"
 				},
 				"url": "http://localhost:12000/media"
 			},
