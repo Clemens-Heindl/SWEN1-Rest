@@ -17,7 +17,8 @@
 							"pm.test(\"Successful POST request\", function () {",
 							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
 							"});",
-							""
+							"var res = JSON.parse(pm.response.body);",
+							"pm.environment.set(\"auth-token\", res.token);"
 						],
 						"type": "text/javascript",
 						"packages": {},
