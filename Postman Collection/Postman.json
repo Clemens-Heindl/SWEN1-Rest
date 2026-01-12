@@ -242,7 +242,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"id\": 1\n    \"comment\": \"really enjoyable\",\n    \"stars\":5\n}"
+					"raw": "{\n\t\"id\": 1,\n    \"comment\": \"really enjoyable\",\n    \"stars\": 5\n}"
 				},
 				"url": "http://localhost:12000/ratings"
 			},
