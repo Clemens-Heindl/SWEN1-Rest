@@ -318,7 +318,7 @@
 					"mode": "raw",
 					"raw": "{\r\n    \"id\": 2\r\n}"
 				},
-				"url": "http://localhost:12000/media/rating"
+				"url": "http://localhost:12000/media/ratings"
 			},
 			"response": []
 		}
