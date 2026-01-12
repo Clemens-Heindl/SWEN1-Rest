@@ -91,7 +91,7 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "Version",
 			"id": "e52e93a6-4336-4a29-9387-54340c13ce59",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -100,6 +100,28 @@
 				"method": "GET",
 				"header": [],
 				"url": "http://localhost:12000/version"
+			},
+			"response": []
+		},
+		{
+			"name": "New MediaEntry",
+			"id": "af631fbd-2bc9-4f9f-9452-84f1156a4da3",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"Game\",\r\n    \"title\": \"Minecraft\",\r\n    \"release\": \"2009\",\r\n    \"restriction\": \"6\",\r\n    \"genres\": \"Adventure\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:12000/media"
 			},
 			"response": []
 		}
