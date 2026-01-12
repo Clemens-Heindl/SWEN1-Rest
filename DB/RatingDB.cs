@@ -23,11 +23,11 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
             obj.Owner = re.GetString(0);
             obj.Comment = re.GetString(1);
             obj.Stars = re.GetInt32(3);
-            obj.Entry = MediaEntry.Get(re.GetString(4));
+            obj.Entry = MediaEntry.Get(re.GetInt32(4));
         }
         return obj;
     }
-    public override Rating? Get(string id, Session? session = null)
+    public override Rating? Get(int id, Session? session = null)
     {   
         if(session ==  null) return null;
         var sql = "SELECT OWNER, COMMENT, STARS, ENTRY FROM RATINGS WHERE ID = @u";

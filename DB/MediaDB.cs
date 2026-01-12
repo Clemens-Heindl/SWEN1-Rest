@@ -26,13 +26,14 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
             obj.Description = re.GetString(3);
             obj.ReleaseYear = re.GetInt32(4);
             obj.AgeRestriction = re.GetInt32(5);
+            obj.Genre = re.GetString(6);
         }
         return obj;
     }
-    public override MediaEntry? Get(string id, Session? session = null)
+    public override MediaEntry? Get(int id, Session? session = null)
     {   
         if(session ==  null) return null;
-        var sql = "SELECT CREATOR, TITLE, MEDIATYPE, DESCRIPTION, RELEASEYEAR, AGERESTRICTION FROM MEDIA WHERE ID = @u";
+        var sql = "SELECT CREATOR, TITLE, MEDIATYPE, DESCRIPTION, RELEASEYEAR, AGERATING, GENRE FROM MEDIA WHERE ID = @u";
         using var cmd = new NpgsqlCommand(sql, _Cn);
         cmd.Parameters.AddWithValue("u", id); 
         using var reader = cmd.ExecuteReader();
@@ -49,7 +50,7 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
 
     public override IEnumerable<MediaEntry> GetAll(Session? session = null)
     {
-        var sql = "SELECT CREATOR, TITLE, MEDIATYPE, DESCRIPTION, RELEASEYEAR, AGERESTRICTION FROM MEDIA";
+        var sql = "SELECT CREATOR, TITLE, MEDIATYPE, DESCRIPTION, RELEASEYEAR, AGERATING, GENRE FROM MEDIA";
         using var cmd = new NpgsqlCommand(sql, _Cn);
         using var reader = cmd.ExecuteReader();
 
@@ -65,7 +66,7 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
 
     public override void Refresh(MediaEntry obj)
     {
-        var sql = "SELECT CREATOR, TITLE, MEDIATYPE, DESCRIPTION, RELEASEYEAR, AGERESTRICTION FROM MEDIA WHERE ID = @u";
+        var sql = "SELECT CREATOR, TITLE, MEDIATYPE, DESCRIPTION, RELEASEYEAR, AGERATING, GENRE FROM MEDIA WHERE ID = @u";
         using var cmd = new NpgsqlCommand(sql, _Cn);
         cmd.Parameters.AddWithValue("u", obj.ID);
         using var reader = cmd.ExecuteReader();
@@ -93,7 +94,7 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
                 throw new InvalidOperationException("MediaEntry name must not be empty.");
             }
 
-            String sql = "INSERT INTO MEDIA (CREATOR, TITLE, MEDIATYPE, DESCRIPTION, RELEASEYEAR, AGERESTRICTION) VALUES (@u, @t, @n, @p, @e, @a)";
+            String sql = "INSERT INTO MEDIA (CREATOR, TITLE, MEDIATYPE, DESCRIPTION, RELEASEYEAR, AGERATING, GENRE) VALUES (@u, @t, @n, @p, @e, @a, @g)";
             using var cmd = new NpgsqlCommand(sql, _Cn);
             cmd.Parameters.AddWithValue("u", obj.Creator);
             cmd.Parameters.AddWithValue("t", obj.Title);
@@ -101,6 +102,7 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
             cmd.Parameters.AddWithValue("p", obj.Description);
             cmd.Parameters.AddWithValue("e", obj.ReleaseYear);
             cmd.Parameters.AddWithValue("a", obj.AgeRestriction);
+            cmd.Parameters.AddWithValue("g", obj.Genre);
             cmd.ExecuteNonQuery();
             Console.WriteLine("MediaEntry saved successfully!");
 

@@ -52,12 +52,12 @@ public sealed class RatingHandler: Handler, IHandler
                 {
                     string? authHeader = e.Context.Request.Headers["Authorization"];
                     Session? session = Session.verifyToken(authHeader);
-                    Rating rating = new()
+                    int ID = e.Content?["id"]?.GetValue<int>() ?? 0;
+                    Rating? rating = Rating.Get(ID, session);
+                    if (rating == null)
                     {
-                        Owner = session!.UserName,
-                        ID = e.Content?["id"]?.GetValue<int>() ?? 0,
-                        
-                    };
+                        throw new InvalidOperationException("Rating doesnt exist");
+                    }
                     rating.Delete();
                     e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "Rating created." });
 
@@ -78,7 +78,7 @@ public sealed class RatingHandler: Handler, IHandler
                 {
                     string? authHeader = e.Context.Request.Headers["Authorization"];
                     Session? session = Session.verifyToken(authHeader);
-                    Rating rating = new()
+                    Rating rating = new(session)
                     {
                         Owner = session!.UserName,
                         Comment = e.Content?["comment"]?.GetValue<string>() ?? string.Empty,

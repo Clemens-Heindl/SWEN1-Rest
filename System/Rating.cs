@@ -35,7 +35,7 @@ public sealed class Rating: Atom, IAtom
 
     private static RatingDatabase _Repository = new();
 
-    public static Rating? Get(string id, Session? session = null)
+    public static Rating? Get(int id, Session? session = null)
     {
         return _Repository.Get(id, session);
         

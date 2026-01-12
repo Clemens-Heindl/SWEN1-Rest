@@ -33,7 +33,8 @@ public sealed class MediaHandler: Handler, IHandler
                         Title = e.Content?["title"]?.GetValue<string>() ?? string.Empty,
                         ReleaseYear = e.Content?["release"]?.GetValue<int>() ?? 0,
                         AgeRestriction = e.Content?["restriction"]?.GetValue<int>() ?? 0,
-                        Genres = e.Content?["genres"]?.GetValue<string[]>() ?? [],
+                        Genre = e.Content?["genre"]?.GetValue<string>() ?? string.Empty,
+                        Description = e.Content?["description"]?.GetValue<string>() ?? string.Empty,
                     };
                     entry.Save();
 
@@ -56,11 +57,12 @@ public sealed class MediaHandler: Handler, IHandler
                 {
                     string? authHeader = e.Context.Request.Headers["Authorization"];
                     Session? session = Session.verifyToken(authHeader);
-                    MediaEntry entry = new()
-                    {
-                        Creator = session!.UserName,
-                        ID = e.Content?["id"]?.GetValue<int>() ?? 0,
-                    };
+                    int ID = e.Content?["id"]?.GetValue<int>() ?? 0;
+                    MediaEntry? entry = MediaEntry.Get(ID, session);
+                    if (entry == null) 
+                    { 
+                        throw new InvalidOperationException("Entry doesnt exist"); 
+                    }
                     entry.Delete();
 
                     e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "Media Entry deleted." });
@@ -82,15 +84,8 @@ public sealed class MediaHandler: Handler, IHandler
                 {
                     string? authHeader = e.Context.Request.Headers["Authorization"];
                     Session? session = Session.verifyToken(authHeader);
-                    MediaEntry entry = new(session)
-                    {
-                        Creator = session!.UserName,
-                        MediaType= e.Content?["type"]?.GetValue<string>() ?? string.Empty,
-                        Title = e.Content?["title"]?.GetValue<string>() ?? string.Empty,
-                        ReleaseYear = e.Content?["release"]?.GetValue<int>() ?? 0,
-                        AgeRestriction = e.Content?["restriction"]?.GetValue<int>() ?? 0,
-                        Genres = e.Content?["genres"]?.GetValue<string[]>() ?? [],
-                    };
+                    int ID = e.Content?["id"]?.GetValue<int>() ?? 0,
+                    MediaEntry entry = MediaEntry.Get(ID, session);
                     entry.Save();
 
                     e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "Media Entry edited." });
