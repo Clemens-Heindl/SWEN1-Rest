@@ -344,6 +344,29 @@
 				"url": "http://localhost:12000/users/leaderboard"
 			},
 			"response": []
+		},
+		{
+			"name": "Profile",
+			"id": "5e30b737-1326-496e-b0a4-12a4c88dbb45",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://localhost:12000/users/profile"
+			},
+			"response": []
 		}
 	]
 }
