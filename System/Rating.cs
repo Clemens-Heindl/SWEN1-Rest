@@ -25,12 +25,17 @@ public sealed class Rating: Atom, IAtom
         get; set;
     } = 0;
 
+    public int ID
+    {
+        get; set;
+    }
+
     private User[]? _LikedBy = null;
 
 
     private static RatingDatabase _Repository = new();
 
-    public Rating? Get(string id, Session? session = null)
+    public static Rating? Get(string id, Session? session = null)
     {
         return _Repository.Get(id, session);
         
@@ -72,13 +77,14 @@ public sealed class Rating: Atom, IAtom
     public override void Save()
     {
         if(!_New) { _EnsureAdminOrOwner(Owner); }
-        _Repository.Save(this );
+        _Repository.Save(this);
         _EndEdit();
     }
 
     public override void Delete()
     {   
         _EnsureAdminOrOwner(Owner);
+        _Repository.Delete(this);
         _EndEdit();
     }
 

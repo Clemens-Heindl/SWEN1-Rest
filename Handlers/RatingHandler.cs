@@ -46,24 +46,23 @@ public sealed class RatingHandler: Handler, IHandler
                 }
             }
             else 
-            if((e.Path == "/ratings") && (e.Method == HttpMethod.Post))
+            if((e.Path == "/ratings") && (e.Method == HttpMethod.Delete))
             {
                 try
                 {
-                    Session? session = Session.Create(e.Content["username"]?.GetValue<string>() ?? string.Empty, e.Content["password"]?.GetValue<string>() ?? string.Empty);
+                    string? authHeader = e.Context.Request.Headers["Authorization"];
+                    Session? session = Session.verifyToken(authHeader);
+                    Rating rating = new()
+                    {
+                        Owner = session!.UserName,
+                        ID = e.Content?["id"]?.GetValue<int>() ?? 0,
+                        
+                    };
+                    rating.Delete();
+                    e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "Rating created." });
 
-                    if(session is null)
-                    {
-                        e.Respond(HttpStatusCode.Unauthorized, new JsonObject() { ["success"] = false, ["reason"] = "Invalid username or password." });
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"[{nameof(RatingHandler)} Invalid login attempt. {e.Method.ToString()} {e.Path}.");
-                    }
-                    else
-                    {
-                        e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["token"] = session.Token });
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        Console.WriteLine($"[{nameof(RatingHandler)} Handled {e.Method.ToString()} {e.Path}.");
-                    }
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"[{nameof(RatingHandler)} Handled {e.Method.ToString()} {e.Path}.");
                 }
                 catch(Exception ex)
                 {
@@ -71,7 +70,34 @@ public sealed class RatingHandler: Handler, IHandler
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"[{nameof(RatingHandler)} Exception creating session. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
+            } else 
+            if((e.Path == "/ratings") && (e.Method == HttpMethod.Put))
+            {
+                try
+                
+                {
+                    string? authHeader = e.Context.Request.Headers["Authorization"];
+                    Session? session = Session.verifyToken(authHeader);
+                    Rating rating = new()
+                    {
+                        Owner = session!.UserName,
+                        Comment = e.Content?["comment"]?.GetValue<string>() ?? string.Empty,
+                        Stars = e.Content?["stars"]?.GetValue<int>() ?? 0,
+                    };
+                    rating.Save();
+                    e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "Rating created." });
+
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"[{nameof(RatingHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                }
+                catch(Exception ex)
+                {
+                    e.Respond(HttpStatusCode.InternalServerError, new JsonObject(){ ["success"] = false, ["reason"] = ex.Message });
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"[{nameof(RatingHandler)} Exception creating rating. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                }
             }
+
 
             else
             {

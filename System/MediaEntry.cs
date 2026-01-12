@@ -15,7 +15,7 @@ public sealed class MediaEntry: Atom, IAtom
 
     private static MediaDatabase _Repository = new();
 
-    public MediaEntry? Get(string id, Session? session = null)
+    public static MediaEntry? Get(string id, Session? session = null)
     {
         return _Repository.Get(id, session);
         

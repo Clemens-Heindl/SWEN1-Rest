@@ -23,7 +23,7 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
             obj.Owner = re.GetString(0);
             obj.Comment = re.GetString(1);
             obj.Stars = re.GetInt32(3);
-            obj.Entry = MediaEntry.Get(re.GetInt32(4).ToString);
+            obj.Entry = MediaEntry.Get(re.GetString(4));
         }
         return obj;
     }
@@ -86,10 +86,6 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
     {
         if(obj != null)
         {
-            if(string.IsNullOrWhiteSpace(obj?.COMMENT))
-            {
-                throw new InvalidOperationException("Rating name must not be empty.");
-            }
 
             String sql = "INSERT INTO RATINGS (OWNER, COMMENT, CONFIRMATION, STARS, ENTRY) VALUES (@u, @n, @p, @e, @a)";
             using var cmd = new NpgsqlCommand(sql, _Cn);
