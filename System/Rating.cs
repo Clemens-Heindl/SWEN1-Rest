@@ -82,6 +82,16 @@ public sealed class Rating: Atom, IAtom
         }
     }
 
+    protected override void _EnsureAdminOrOwner(string owner)
+    {
+        _VerifySession();
+        bool confirmed = (_EditingSession.UserName == (this.Entry?.Creator ?? ""));
+        if (!(_EditingSession!.IsAdmin || (_EditingSession.UserName == owner) || confirmed))
+        {
+            throw new UnauthorizedAccessException("Admin or owner privileges required.");
+        }
+    }
+
     public override void Save()
     {
         if(!_New) { _EnsureAdminOrOwner(Owner); }
@@ -99,6 +109,7 @@ public sealed class Rating: Atom, IAtom
     public override void Refresh()
     {
         _Repository.Refresh(this);
+        _EnsureAdminOrOwner(Owner);
     }
 
     public bool Exists()

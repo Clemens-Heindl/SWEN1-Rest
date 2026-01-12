@@ -29,7 +29,6 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
     }
     public override Rating? Get<Tid>(Tid id, Session? session = null)
     {   
-        if(session ==  null) return null;
         var sql = "SELECT OWNER, COMMENT, STARS, ENTRY FROM RATINGS WHERE ID = @u";
         using var cmd = new NpgsqlCommand(sql, _Cn);
         cmd.Parameters.AddWithValue("u", id); 

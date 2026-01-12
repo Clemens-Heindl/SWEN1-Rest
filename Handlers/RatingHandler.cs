@@ -116,12 +116,44 @@ public sealed class RatingHandler: Handler, IHandler
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"[{nameof(RatingHandler)} Exception updating rating. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
+            } else
+            if ((e.Path == "/ratings/confirm") && (e.Method == HttpMethod.Put))
+            {
+                try
+
+                {
+                    string? authHeader = e.Context.Request.Headers["Authorization"];
+                    Session? session = Session.verifyToken(authHeader);
+                    int ID = e.Content?["id"]?.GetValue<int>() ?? 0;
+                    Rating? entry = new(session)
+                    {
+                        ID = ID
+                    };
+                    entry.Refresh();
+                    entry.Entry.Refresh();
+                    if (entry == null)
+                    {
+                        throw new InvalidOperationException("Rating doesnt exist");
+                    }
+                    entry._Confirmation = true;
+                    Rating.Repo.Edit(ID, entry);
+                    e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "Rating confirmed." });
+
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"[{nameof(RatingHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                }
+                catch (Exception ex)
+                {
+                    e.Respond(HttpStatusCode.InternalServerError, new JsonObject() { ["success"] = false, ["reason"] = ex.Message });
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"[{nameof(RatingHandler)} Exception confirming rating. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                }
             }
 
 
             else
             {
-                e.Respond(HttpStatusCode.BadRequest, new JsonObject(){ ["success"] = false, ["reason"] = "Invalid media entry endpoint." });
+                e.Respond(HttpStatusCode.BadRequest, new JsonObject() { ["success"] = false, ["reason"] = "Invalid media entry endpoint." });
 
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"[{nameof(RatingHandler)} Invalid ratings endpoint.");

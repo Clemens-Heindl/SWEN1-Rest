@@ -32,7 +32,6 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
     }
     public override MediaEntry? Get<Tid>(Tid id, Session? session = null)
     {   
-        if(session ==  null) return null;
         var sql = "SELECT CREATOR, TITLE, MEDIATYPE, DESCRIPTION, RELEASEYEAR, AGERATING, GENRE FROM MEDIA WHERE ID = @u";
         using var cmd = new NpgsqlCommand(sql, _Cn);
         cmd.Parameters.AddWithValue("u", id); 

@@ -35,7 +35,7 @@ public abstract class Atom: IAtom
 
     /// <summary>Checks if the session has administrative privileges or represents the objevt owner.</summary>
     /// <exception cref="UnauthorizedAccessException">Thrown when the session doesn't have access.</exception>
-    protected void _EnsureAdminOrOwner(string owner)
+    protected virtual void _EnsureAdminOrOwner(string owner)
     {
         _VerifySession();
         if(!(_EditingSession!.IsAdmin || (_EditingSession.UserName == owner)))
