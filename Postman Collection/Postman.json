@@ -270,6 +270,18 @@
 				"url": "http://localhost:12000/ratings/confirm"
 			},
 			"response": []
+		},
+		{
+			"name": "Search/Filter Media",
+			"id": "6325bc4b-9e3f-41c8-8561-ba3e7c6c30fa",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
 		}
 	]
 }
