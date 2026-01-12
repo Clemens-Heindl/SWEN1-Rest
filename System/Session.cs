@@ -120,6 +120,19 @@ public sealed class Session
         return rval;
     }
 
+    public static Session? verifyToken(string authHeader){
+        
+    if (authHeader != null && authHeader.StartsWith("Bearer "))
+    {
+        // Extract token
+        string token = authHeader["Bearer ".Length..].Trim();
+        return Session.Get(token);
+    } else
+    {
+        throw new UnauthorizedAccessException("Invalid Session Token.");
+    }
+}
+
     
     /// <summary>Closes all outdated sessions.</summary>
     private static void _Cleanup()

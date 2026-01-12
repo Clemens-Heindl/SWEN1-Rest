@@ -1,4 +1,5 @@
 using System;
+using Clemens.SWEN1.Database;
 
 
 
@@ -22,8 +23,7 @@ public sealed class MediaEntry: Atom, IAtom
 
     public int ID {
         get; set;
-    };
-
+    }
     public string MediaType {
         get; set;
     } = string.Empty;
@@ -56,7 +56,7 @@ public sealed class MediaEntry: Atom, IAtom
     public MediaEntry(Session? session = null)
     {
         _EditingSession = session;
-        _New = true;
+        _New = false;
     }
 
     public string Creator
@@ -75,13 +75,14 @@ public sealed class MediaEntry: Atom, IAtom
     public override void Save()
     {
         if(!_New) { _EnsureAdminOrOwner(Creator); }
-        _Repository.Save(this );
+        _Repository.Save(this);
         _EndEdit();
     }
 
     public override void Delete()
     {   
         _EnsureAdminOrOwner(Creator);
+        _Repository.Delete(this);
         _EndEdit();
     }
 

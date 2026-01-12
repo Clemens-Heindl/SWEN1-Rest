@@ -24,11 +24,11 @@ public sealed class RatingHandler: Handler, IHandler
                 try
                 
                 {
-                    string? authHeader = Request.Headers["Authorization"];
-                    Session? session = verifyToken(authHeader);
+                    string? authHeader = e.Context.Request.Headers["Authorization"];
+                    Session? session = Session.verifyToken(authHeader);
                     Rating rating = new()
                     {
-                        owner = session.UserName;
+                        Owner = session!.UserName,
                         Comment = e.Content?["comment"]?.GetValue<string>() ?? string.Empty,
                         Stars = e.Content?["stars"]?.GetValue<int>() ?? 0,
                     };
