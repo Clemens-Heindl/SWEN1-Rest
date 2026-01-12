@@ -65,7 +65,7 @@ public sealed class MediaEntry: Atom, IAtom
         get { return _Creator; }
         set 
         {
-            if(!_New) { throw new InvalidOperationException("Creator cannot be changed."); }
+            if(!_New && _EditingSession == null) { throw new InvalidOperationException("Creator cannot be changed."); }
             if(string.IsNullOrWhiteSpace(value)) { throw new ArgumentException("User name of creator must not be empty."); }
             
             _Creator = value; 
@@ -89,6 +89,6 @@ public sealed class MediaEntry: Atom, IAtom
 
     public override void Refresh()
     {
-        _EndEdit();
+        _Repository.Refresh(this);
     }
 }

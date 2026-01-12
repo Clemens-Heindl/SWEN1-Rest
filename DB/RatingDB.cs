@@ -27,7 +27,7 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
         }
         return obj;
     }
-    public override Rating? Get(int id, Session? session = null)
+    public override Rating? Get<Tid>(Tid id, Session? session = null)
     {   
         if(session ==  null) return null;
         var sql = "SELECT OWNER, COMMENT, STARS, ENTRY FROM RATINGS WHERE ID = @u";

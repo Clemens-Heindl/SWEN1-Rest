@@ -7,7 +7,7 @@ namespace Clemens.SWEN1.Database;
 
 public interface IDatabase<T> where T: IAtom, new()
 {
-    public new T? Get(string id, Session? session = null);
+    public new T? Get<Tid>(Tid id, Session? session = null);
 
     public new IEnumerable<T> GetAll(Session? session = null);
 

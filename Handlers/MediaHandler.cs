@@ -58,7 +58,11 @@ public sealed class MediaHandler: Handler, IHandler
                     string? authHeader = e.Context.Request.Headers["Authorization"];
                     Session? session = Session.verifyToken(authHeader);
                     int ID = e.Content?["id"]?.GetValue<int>() ?? 0;
-                    MediaEntry? entry = MediaEntry.Get(ID, session);
+                    MediaEntry? entry = new(session)
+                    {
+                        ID = ID
+                    };
+                    entry.Refresh();
                     if (entry == null) 
                     { 
                         throw new InvalidOperationException("Entry doesnt exist"); 
@@ -84,7 +88,7 @@ public sealed class MediaHandler: Handler, IHandler
                 {
                     string? authHeader = e.Context.Request.Headers["Authorization"];
                     Session? session = Session.verifyToken(authHeader);
-                    int ID = e.Content?["id"]?.GetValue<int>() ?? 0,
+                    int ID = e.Content?["id"]?.GetValue<int>() ?? 0;
                     MediaEntry entry = MediaEntry.Get(ID, session);
                     entry.Save();
 

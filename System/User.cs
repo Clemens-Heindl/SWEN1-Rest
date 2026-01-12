@@ -29,7 +29,7 @@ public sealed class User: Atom, IAtom
 
     public User? Get(string userName, Session? session = null)
     {
-        return _Repository.Get(userName, session);
+        return _Repository.Get<string>(userName, session);
         
     }
 

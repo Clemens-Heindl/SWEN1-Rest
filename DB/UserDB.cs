@@ -27,7 +27,7 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
         }
         return obj;
     }
-    public override User? Get(int id, Session? session = null)
+    public override User? Get<Tid>(Tid id, Session? session = null)
     {   
         if(session ==  null) return null;
         var sql = "SELECT USERNAME, NAME, EMAIL, HADMIN FROM USERS WHERE USERNAME = @u AND PASSWD = @p";

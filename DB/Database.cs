@@ -32,7 +32,7 @@ public abstract class Database<T>: IDatabase<T> where T: IAtom, new()
     
     protected abstract T _CreateObject(IDataReader re);
 
-    public abstract T? Get(int id, Session? session = null);
+    public abstract T? Get<Tid>(Tid id, Session? session = null);
 
     public abstract IEnumerable<T> GetAll(Session? session = null);
 
@@ -43,7 +43,7 @@ public abstract class Database<T>: IDatabase<T> where T: IAtom, new()
     public abstract void Delete(T obj);
 
 
-    T? IDatabase<T>.Get(int id, Session? session)
+    T? IDatabase<T>.Get<Tid>(Tid id, Session? session)
     {
         return Get(id, session);
     }

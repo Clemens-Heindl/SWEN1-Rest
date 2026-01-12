@@ -30,7 +30,7 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
         }
         return obj;
     }
-    public override MediaEntry? Get(int id, Session? session = null)
+    public override MediaEntry? Get<Tid>(Tid id, Session? session = null)
     {   
         if(session ==  null) return null;
         var sql = "SELECT CREATOR, TITLE, MEDIATYPE, DESCRIPTION, RELEASEYEAR, AGERATING, GENRE FROM MEDIA WHERE ID = @u";
