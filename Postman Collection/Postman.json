@@ -17,7 +17,9 @@
 							"pm.test(\"Successful POST request\", function () {",
 							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
 							"});",
-							""
+							"const res = pm.response.json();",
+							"console.log(res);",
+							"pm.environment.set(\"auth-token\", res.token);"
 						],
 						"type": "text/javascript",
 						"packages": {},
@@ -91,7 +93,7 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "Version",
 			"id": "e52e93a6-4336-4a29-9387-54340c13ce59",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -100,6 +102,149 @@
 				"method": "GET",
 				"header": [],
 				"url": "http://localhost:12000/version"
+			},
+			"response": []
+		},
+		{
+			"name": "New MediaEntry",
+			"id": "af631fbd-2bc9-4f9f-9452-84f1156a4da3",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"Game\",\r\n    \"title\": \"Minecraft\",\r\n    \"release\": 2009,\r\n    \"restriction\": 6,\r\n    \"genre\": \"Adventure\",\r\n    \"description\": \"The worlds greatest sandbox game\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:12000/media"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Media Entry",
+			"id": "dc27b758-d900-4197-844d-e0cbe7e85ed2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1\r\n}"
+				},
+				"url": "http://localhost:12000/media"
+			},
+			"response": []
+		},
+		{
+			"name": "Edit MediaEntry",
+			"id": "4b0e9f78-da69-49c5-b33e-538a4063f776",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 2,\r\n    \"type\": \"Movie\",\r\n    \"title\": \"A Minecraft Movie\",\r\n    \"release\": 2025,\r\n    \"restriction\": 6,\r\n    \"genre\": \"Adventure\",\r\n    \"description\": \"The movie with jack black, jason momoa, emma myers and many more\"\r\n}"
+				},
+				"url": "http://localhost:12000/media"
+			},
+			"response": []
+		},
+		{
+			"name": "New Rating",
+			"id": "a7284c33-e1fa-4133-a335-13a2275b019b",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"entry\": 2,\n    \"comment\": \"really enjoyable\",\n    \"stars\":5\n}"
+				},
+				"url": "http://localhost:12000/ratings"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Rating",
+			"id": "3f663d9c-8acc-4e54-92ae-617f654815c2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 1\n}"
+				},
+				"url": "http://localhost:12000/ratings"
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Rating",
+			"id": "8eff291f-e5d7-4b11-a66e-8b1facb53e62",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 1,\n    \"comment\": \"really enjoyable\",\n    \"stars\": 5\n}"
+				},
+				"url": "http://localhost:12000/ratings"
 			},
 			"response": []
 		}
