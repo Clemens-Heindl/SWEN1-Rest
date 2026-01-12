@@ -110,11 +110,17 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "xOBwYEUChON0oynKXxk7r41W"
+					}
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"type\": \"Game\",\r\n    \"title\": \"Minecraft\",\r\n    \"release\": \"2009\",\r\n    \"restriction\": \"6\",\r\n    \"genres\": \"Adventure\"\r\n}",
+					"raw": "{\r\n    \"type\": \"Game\",\r\n    \"title\": \"Minecraft\",\r\n    \"release\": 2009,\r\n    \"restriction\": 6,\r\n    \"genres\": [\"Adventure\", \"Creativity\"]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
