@@ -115,7 +115,7 @@
 				"auth": {
 					"type": "bearer",
 					"bearer": {
-						"token": "ducyOipOQU7XRG9FGMPTGyl2"
+						"token": "{{auth-token}}"
 					}
 				},
 				"method": "POST",
@@ -143,7 +143,7 @@
 				"auth": {
 					"type": "bearer",
 					"bearer": {
-						"token": "ducyOipOQU7XRG9FGMPTGyl2"
+						"token": "{{auth-token}}"
 					}
 				},
 				"method": "DELETE",
