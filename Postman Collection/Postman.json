@@ -203,7 +203,7 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "Delete Rating",
 			"id": "3f663d9c-8acc-4e54-92ae-617f654815c2",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -220,6 +220,29 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\n\t\"id\": 1\n}"
+				},
+				"url": "http://localhost:12000/ratings"
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Rating",
+			"id": "8eff291f-e5d7-4b11-a66e-8b1facb53e62",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 1\n    \"comment\": \"really enjoyable\",\n    \"stars\":5\n}"
 				},
 				"url": "http://localhost:12000/ratings"
 			},
