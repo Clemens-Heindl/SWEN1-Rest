@@ -288,7 +288,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"filter\": \"title\",\r\n    \"keyword\": \"Minecraft\"\r\n}",
+					"raw": "{\r\n    \"filter\": \"id\",\r\n    \"keyword\": \"2\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
