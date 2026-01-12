@@ -21,6 +21,11 @@ public sealed class MediaEntry: Atom, IAtom
         
     }
 
+    public static MediaDatabase Repo {
+        get { return _Repository; }
+    }
+
+
     public int ID {
         get; set;
     }
@@ -80,10 +85,10 @@ public sealed class MediaEntry: Atom, IAtom
         _EndEdit();
     }
 
-    public override void Edit(MediaEntry newEntry)
+    public void Edit(MediaEntry newEntry)
     {
         if (!_New) { _EnsureAdminOrOwner(Creator); }
-        _Repository.Edit<int>(ID, newEntry);
+        _Repository.Edit(ID, newEntry);
         _EndEdit();
     }
 

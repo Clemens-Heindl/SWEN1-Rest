@@ -107,7 +107,7 @@ public sealed class MediaHandler: Handler, IHandler
                         Genre = e.Content?["genre"]?.GetValue<string>() ?? string.Empty,
                         Description = e.Content?["description"]?.GetValue<string>() ?? string.Empty,
                     };
-                    entry.Edit(newData);
+                    MediaEntry.Repo.Edit(ID, newData);
                     e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "Media Entry edited." });
 
                     Console.ForegroundColor = ConsoleColor.Blue;

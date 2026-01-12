@@ -105,7 +105,7 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
         }
     }
 
-    public override void Edit<Tid>(Tid id, Rating obj)
+    public void Edit(int id, Rating obj)
     {
         if (obj != null)
         {

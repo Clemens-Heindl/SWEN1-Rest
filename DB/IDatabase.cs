@@ -16,6 +16,4 @@ public interface IDatabase<T> where T: IAtom, new()
     public void Save(T obj);
 
     public void Delete(T obj);
-
-    public void Edit<Tid>(Tid id, T obj);
 }

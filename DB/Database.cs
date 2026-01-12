@@ -68,8 +68,4 @@ public abstract class Database<T>: IDatabase<T> where T: IAtom, new()
         Delete((T) obj);
     }
 
-    void IDatabase<T>.Edit<Tid>(Tid id, T obj)
-    {
-        Delete((T)obj);
-    }
 }

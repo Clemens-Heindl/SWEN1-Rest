@@ -113,7 +113,7 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
             throw new InvalidOperationException("User must not be null.");
         }
     }
-    public override void Edit<Tid>(Tid id, User obj)
+    public void Edit(string id, User obj)
     {
         if (obj != null)
         {

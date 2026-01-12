@@ -113,7 +113,7 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
             throw new InvalidOperationException("MediaEntry must not be null.");
         }
     }
-    public override void Edit<Tid>(Tid id, MediaEntry obj)
+    public void Edit(int id, MediaEntry obj)
     {
         if (obj != null)
         {
