@@ -201,6 +201,29 @@
 				"url": "http://localhost:12000/ratings"
 			},
 			"response": []
+		},
+		{
+			"name": "New Request",
+			"id": "3f663d9c-8acc-4e54-92ae-617f654815c2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 1\n}"
+				},
+				"url": "http://localhost:12000/ratings"
+			},
+			"response": []
 		}
 	]
 }
