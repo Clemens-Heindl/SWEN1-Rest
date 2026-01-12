@@ -1,8 +1,8 @@
-﻿using System.Net;
-using System.Text.Json.Nodes;
-
+﻿using Clemens.SWEN1.Server;
 using Clemens.SWEN1.System;
-using Clemens.SWEN1.Server;
+using System.Net;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 
 
@@ -72,11 +72,37 @@ public sealed class UserHandler: Handler, IHandler
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"[{nameof(UserHandler)} Exception creating session. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
+            } else
+            if ((e.Path == "/users/leaderboard") && (e.Method == HttpMethod.Post))
+            {
+                try
+                {
+                    string? authHeader = e.Context.Request.Headers["Authorization"];
+                    Session? session = Session.verifyToken(authHeader);
+                    int ID = e.Content?["id"]?.GetValue<int>() ?? 0;
+                    IEnumerable<User> entries = MediaEntry.Repo.Leaderboard();
+                    if (!entries.Any())
+                    {
+                        throw new InvalidOperationException("No active users");
+                    }
+
+
+                    e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["Leaderboard"] = JsonSerializer.SerializeToNode(entries) });
+
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"[{nameof(MediaHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                }
+                catch (Exception ex)
+                {
+                    e.Respond(HttpStatusCode.InternalServerError, new JsonObject() { ["success"] = false, ["reason"] = ex.Message });
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"[{nameof(UserHandler)} Exception getting leaderboard. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                }
             }
 
             else
             {
-                e.Respond(HttpStatusCode.BadRequest, new JsonObject(){ ["success"] = false, ["reason"] = "Invalid user endpoint." });
+                e.Respond(HttpStatusCode.BadRequest, new JsonObject() { ["success"] = false, ["reason"] = "Invalid user endpoint." });
 
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"[{nameof(UserHandler)} Invalid user endpoint.");

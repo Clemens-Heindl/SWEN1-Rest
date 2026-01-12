@@ -1,6 +1,7 @@
-using System.Text;
-using Clemens.SWEN1.System;
 using Clemens.SWEN1.Database;
+using Clemens.SWEN1.System;
+using System.Text;
+using System.Text.Json.Serialization;
 
 
 namespace Clemens.SWEN1.System;
@@ -13,6 +14,7 @@ public sealed class Rating: Atom, IAtom
 
     private bool _New;
 
+    [JsonIgnore]
     public bool _Confirmation{
         get; set;
     } = false;
@@ -29,6 +31,7 @@ public sealed class Rating: Atom, IAtom
         set => _stars = Math.Clamp(value, 0, 5);
     }
 
+    [JsonIgnore]
     public int ID
     {
         get; set;
@@ -71,6 +74,7 @@ public sealed class Rating: Atom, IAtom
         }
     }
 
+    [JsonIgnore]
     public MediaEntry Entry
     {
         get { return _Entry; }

@@ -1,8 +1,8 @@
-using System.Net;
-using System.Text.Json.Nodes;
-
-using Clemens.SWEN1.System;
 using Clemens.SWEN1.Server;
+using Clemens.SWEN1.System;
+using System.Net;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 
 
@@ -119,11 +119,72 @@ public sealed class MediaHandler: Handler, IHandler
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"[{nameof(MediaHandler)} Exception editing media entry. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
+            } else 
+            if ((e.Path == "/media") && (e.Method == HttpMethod.Get))
+            {
+                try
+                {
+                    string? authHeader = e.Context.Request.Headers["Authorization"];
+                    Session? session = Session.verifyToken(authHeader);
+                    string filter = e.Content?["filter"]?.GetValue<string>() ?? string.Empty;
+                    string keyword = e.Content?["keyword"]?.GetValue<string>() ?? string.Empty;
+                    IEnumerable<MediaEntry> entries = MediaEntry.Repo.Search(filter, keyword);
+                    if (!entries.Any())
+                    {
+                        throw new InvalidOperationException("Search Query yielded no results");
+                    }
+
+
+                    e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["result"] = JsonSerializer.SerializeToNode(entries) });
+
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"[{nameof(MediaHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                }
+                catch (Exception ex)
+                {
+                    e.Respond(HttpStatusCode.InternalServerError, new JsonObject() { ["success"] = false, ["reason"] = ex.Message });
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"[{nameof(MediaHandler)} Exception searching media entry. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                }
+            } else
+            if ((e.Path == "/media/ratings") && (e.Method == HttpMethod.Get))
+            {
+                try
+                {
+                    string? authHeader = e.Context.Request.Headers["Authorization"];
+                    Session? session = Session.verifyToken(authHeader);
+                    int ID = e.Content?["id"]?.GetValue<int>() ?? 0;
+                    IEnumerable<Rating> entries = Rating.Repo.Search(ID);
+                    if (!entries.Any())
+                    {
+                        throw new InvalidOperationException("Media Entry has not yet been rated");
+                    }
+
+                    int totalStars = 0;
+                    int ratingsCount = 0;
+                    foreach(var rating in entries)
+                    {
+                        totalStars += rating.Stars;
+                        ratingsCount++;
+                    }
+
+
+                    e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["averageRating"] = (totalStars/ratingsCount), ["ratings"] = JsonSerializer.SerializeToNode(entries) });
+
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"[{nameof(MediaHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                }
+                catch (Exception ex)
+                {
+                    e.Respond(HttpStatusCode.InternalServerError, new JsonObject() { ["success"] = false, ["reason"] = ex.Message });
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"[{nameof(MediaHandler)} Exception viewing media ratings. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                }
             }
 
             else
             {
-                e.Respond(HttpStatusCode.BadRequest, new JsonObject(){ ["success"] = false, ["reason"] = "Invalid media entry endpoint." });
+                e.Respond(HttpStatusCode.BadRequest, new JsonObject() { ["success"] = false, ["reason"] = "Invalid media entry endpoint." });
 
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"[{nameof(MediaHandler)} Invalid media entry endpoint.");

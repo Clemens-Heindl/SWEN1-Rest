@@ -19,12 +19,10 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
 
     protected override Rating _RefreshObject(IDataReader re, Rating obj)
     {
-        if(re.Read()){
-            obj.Owner = re.GetString(0);
-            obj.Comment = re.GetString(1);
-            obj.Stars = re.GetInt32(2);
-            obj.Entry = MediaEntry.Get(re.GetInt32(3));
-        }
+        obj.Owner = re.GetString(0);
+        obj.Comment = re.GetString(1);
+        obj.Stars = re.GetInt32(2);
+        obj.Entry = MediaEntry.Get(re.GetInt32(3));
         return obj;
     }
     public override Rating? Get<Tid>(Tid id, Session? session = null)
@@ -38,6 +36,7 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
             Console.WriteLine("Rating not found");
             return null;
         }
+        if (!reader.Read()) return null;
         return _CreateObject(reader);
 
         
@@ -66,6 +65,7 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
         using var cmd = new NpgsqlCommand(sql, _Cn);
         cmd.Parameters.AddWithValue("u", obj.ID);
         using var reader = cmd.ExecuteReader();
+        if (!reader.Read()) return;
         _RefreshObject(reader, obj);
 
     }
@@ -134,5 +134,23 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
         cmd.Parameters.AddWithValue("e", obj.Entry.ID);
         using var reader = cmd.ExecuteReader();
         return (reader.HasRows);
+    }
+
+    public IEnumerable<Rating> Search(int ID)
+    {
+
+
+        var sql = "SELECT OWNER, COMMENT, STARS, ENTRY FROM RATINGS WHERE ID = @i AND CONFIRMATION = true";
+        using var cmd = new NpgsqlCommand(sql, _Cn);
+        cmd.Parameters.AddWithValue("i", ID);
+        using var reader = cmd.ExecuteReader();
+
+        List<Rating> rval = new List<Rating>();
+        while (reader.Read())
+        {
+            rval.Add(_CreateObject(reader));
+        }
+
+        return rval;
     }
 }

@@ -1,8 +1,9 @@
-﻿using System.Security.Cryptography;
-using System.Text;
+﻿using Clemens.SWEN1.Database;
 using System.Collections;
 using System.Data;
-using Clemens.SWEN1.Database;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Clemens.SWEN1.System;
 
@@ -15,7 +16,10 @@ public sealed class User: Atom, IAtom
     private string? _PasswordHash = null;
 
     private static UserDatabase _Repository = new();
-
+    public static UserDatabase Repo
+    {
+        get { return _Repository; }
+    }
     public User(Session? session = null)
     {
         _EditingSession = session;
@@ -61,11 +65,13 @@ public sealed class User: Atom, IAtom
         get; set;
     } = string.Empty;
 
+    [JsonIgnore]
     public string PasswordHash
     {
         get => _PasswordHash ?? string.Empty;
     }
 
+    [JsonIgnore]
     public bool isAdmin
     {
         get; set;
