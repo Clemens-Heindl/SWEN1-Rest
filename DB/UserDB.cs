@@ -113,4 +113,30 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
             throw new InvalidOperationException("User must not be null.");
         }
     }
+    public override void Edit<Tid>(Tid id, User obj)
+    {
+        if (obj != null)
+        {
+            if (string.IsNullOrWhiteSpace(obj.PasswordHash))
+            {
+                throw new InvalidOperationException("Password must not be empty.");
+            }
+
+            String sql = "UPDATE USERS SET NAME =  @n, PASSWD = @p, EMAIL = @e, HADMIN = @a WHERE USERNAME = @u";
+            using var cmd = new NpgsqlCommand(sql, _Cn);
+            cmd.Parameters.AddWithValue("u", id);
+            cmd.Parameters.AddWithValue("n", obj.FullName);
+            cmd.Parameters.AddWithValue("p", obj.PasswordHash);
+            cmd.Parameters.AddWithValue("e", obj.EMail);
+            cmd.Parameters.AddWithValue("a", obj.isAdmin);
+            cmd.ExecuteNonQuery();
+            Console.WriteLine("User updated successfully!");
+
+
+        }
+        else
+        {
+            throw new InvalidOperationException("User must not be null.");
+        }
+    }
 }

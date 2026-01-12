@@ -80,6 +80,13 @@ public sealed class MediaEntry: Atom, IAtom
         _EndEdit();
     }
 
+    public override void Edit(MediaEntry newEntry)
+    {
+        if (!_New) { _EnsureAdminOrOwner(Creator); }
+        _Repository.Edit<int>(ID, newEntry);
+        _EndEdit();
+    }
+
     public override void Delete()
     {   
         _EnsureAdminOrOwner(Creator);

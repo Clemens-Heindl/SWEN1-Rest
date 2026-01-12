@@ -113,4 +113,32 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
             throw new InvalidOperationException("MediaEntry must not be null.");
         }
     }
+    public override void Edit<Tid>(Tid id, MediaEntry obj)
+    {
+        if (obj != null)
+        {
+            if (string.IsNullOrWhiteSpace(obj?.Title))
+            {
+                throw new InvalidOperationException("MediaEntry name must not be empty.");
+            }
+
+            String sql = "UPDATE MEDIA SET TITLE = @t, MEDIATYPE = @n, DESCRIPTION = @p, RELEASEYEAR = @e, AGERATING = @a, GENRE = @g WHERE ID = @u";
+            using var cmd = new NpgsqlCommand(sql, _Cn);
+            cmd.Parameters.AddWithValue("u", id);
+            cmd.Parameters.AddWithValue("t", obj.Title);
+            cmd.Parameters.AddWithValue("n", obj.MediaType);
+            cmd.Parameters.AddWithValue("p", obj.Description);
+            cmd.Parameters.AddWithValue("e", obj.ReleaseYear);
+            cmd.Parameters.AddWithValue("a", obj.AgeRestriction);
+            cmd.Parameters.AddWithValue("g", obj.Genre);
+            cmd.ExecuteNonQuery();
+            Console.WriteLine("MediaEntry edited successfully!");
+
+
+        }
+        else
+        {
+            throw new InvalidOperationException("MediaEntry must not be null.");
+        }
+    }
 }

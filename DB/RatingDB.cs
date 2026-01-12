@@ -104,4 +104,26 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
             throw new InvalidOperationException("Rating must not be null.");
         }
     }
+
+    public override void Edit<Tid>(Tid id, Rating obj)
+    {
+        if (obj != null)
+        {
+
+            String sql = "UPDATE RATINGS SET COMMENT =  @n, CONFIRMATION = @p, STARS = @e WHERE ID = @u";
+            using var cmd = new NpgsqlCommand(sql, _Cn);
+            cmd.Parameters.AddWithValue("u", id);
+            cmd.Parameters.AddWithValue("n", obj.Comment);
+            cmd.Parameters.AddWithValue("p", obj._Confirmation);
+            cmd.Parameters.AddWithValue("e", obj.Stars);
+            cmd.ExecuteNonQuery();
+            Console.WriteLine("Rating edited successfully!");
+
+
+        }
+        else
+        {
+            throw new InvalidOperationException("Rating must not be null.");
+        }
+    }
 }

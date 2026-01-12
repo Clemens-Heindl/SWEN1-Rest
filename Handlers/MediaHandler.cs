@@ -89,9 +89,25 @@ public sealed class MediaHandler: Handler, IHandler
                     string? authHeader = e.Context.Request.Headers["Authorization"];
                     Session? session = Session.verifyToken(authHeader);
                     int ID = e.Content?["id"]?.GetValue<int>() ?? 0;
-                    MediaEntry entry = MediaEntry.Get(ID, session);
-                    entry.Save();
-
+                    MediaEntry? entry = new(session)
+                    {
+                        ID = ID
+                    };
+                    entry.Refresh();
+                    if (entry == null)
+                    {
+                        throw new InvalidOperationException("Entry doesnt exist");
+                    }
+                    MediaEntry newData = new()
+                    {
+                        MediaType = e.Content?["type"]?.GetValue<string>() ?? string.Empty,
+                        Title = e.Content?["title"]?.GetValue<string>() ?? string.Empty,
+                        ReleaseYear = e.Content?["release"]?.GetValue<int>() ?? 0,
+                        AgeRestriction = e.Content?["restriction"]?.GetValue<int>() ?? 0,
+                        Genre = e.Content?["genre"]?.GetValue<string>() ?? string.Empty,
+                        Description = e.Content?["description"]?.GetValue<string>() ?? string.Empty,
+                    };
+                    entry.Edit(newData);
                     e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "Media Entry edited." });
 
                     Console.ForegroundColor = ConsoleColor.Blue;
