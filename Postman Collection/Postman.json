@@ -157,7 +157,7 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "Edit MediaEntry",
 			"id": "4b0e9f78-da69-49c5-b33e-538a4063f776",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
