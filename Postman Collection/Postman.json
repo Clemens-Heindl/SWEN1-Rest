@@ -247,6 +247,29 @@
 				"url": "http://localhost:12000/ratings"
 			},
 			"response": []
+		},
+		{
+			"name": "Confirm Rating",
+			"id": "bfbe0879-6353-4e98-ba9d-8a5622415c84",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 1\n}"
+				},
+				"url": "http://localhost:12000/ratings/confirm"
+			},
+			"response": []
 		}
 	]
 }
