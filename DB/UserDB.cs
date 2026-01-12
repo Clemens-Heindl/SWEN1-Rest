@@ -19,12 +19,19 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
 
     protected override User _RefreshObject(IDataReader re, User obj)
     {
-        if(re.Read()){
-            obj.UserName = re.GetString(0);
-            obj.FullName = re.GetString(1);
-            obj.EMail = re.GetString(2);
-            obj.isAdmin = re.GetBoolean(3);
+        obj.UserName = re.GetString(0);
+        obj.FullName = re.GetString(1);
+        obj.EMail = re.GetString(2);
+        obj.isAdmin = re.GetBoolean(3);
+        try
+        {
+            obj.Score = re.GetInt32(re.GetOrdinal("Score"));
         }
+        catch
+        {
+            obj.Score = 0; 
+        }
+
         return obj;
     }
     public override User? Get<Tid>(Tid id, Session? session = null)
@@ -40,6 +47,7 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
             Console.WriteLine("Invalid Password");
             return null;
         }
+        if (!reader.Read()) return null;
         return _CreateObject(reader);
 
         
@@ -68,6 +76,7 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
         using var cmd = new NpgsqlCommand(sql, _Cn);
         cmd.Parameters.AddWithValue("u", obj.UserName);
         using var reader = cmd.ExecuteReader();
+        if (!reader.Read()) return;
         _RefreshObject(reader, obj);
 
     }
@@ -138,5 +147,21 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
         {
             throw new InvalidOperationException("User must not be null.");
         }
+    }
+
+    public IEnumerable<User> Leaderboard()
+    {
+        var sql = "SELECT USERS.USERNAME, USERS.NAME, USERS.EMAIL, USERS.HADMIN, COUNT(MEDIA.ID) AS score FROM USERS JOIN MEDIA ON USERS.USERNAME = MEDIA.CREATOR "+
+            "GROUP BY USERS.USERNAME, USERS.NAME, USERS.EMAIL, USERS.HADMIN ORDER BY score";
+        using var cmd = new NpgsqlCommand(sql, _Cn);
+        using var reader = cmd.ExecuteReader();
+
+        List<User> rval = new List<User>();
+        while (reader.Read())
+        {
+            rval.Add(_CreateObject(reader));
+        }
+
+        return rval;
     }
 }

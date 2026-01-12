@@ -73,14 +73,13 @@ public sealed class UserHandler: Handler, IHandler
                     Console.WriteLine($"[{nameof(UserHandler)} Exception creating session. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
             } else
-            if ((e.Path == "/users/leaderboard") && (e.Method == HttpMethod.Post))
+            if ((e.Path == "/users/leaderboard") && (e.Method == HttpMethod.Get))
             {
                 try
                 {
                     string? authHeader = e.Context.Request.Headers["Authorization"];
                     Session? session = Session.verifyToken(authHeader);
-                    int ID = e.Content?["id"]?.GetValue<int>() ?? 0;
-                    IEnumerable<User> entries = MediaEntry.Repo.Leaderboard();
+                    IEnumerable<User> entries = User.Repo.Leaderboard();
                     if (!entries.Any())
                     {
                         throw new InvalidOperationException("No active users");

@@ -84,6 +84,11 @@ public sealed class User: Atom, IAtom
         get; set;
     } = string.Empty;
 
+    public int Score
+    {
+        get; set;
+    } = 0;
+
 
     public void SetPassword(string password)
     {
