@@ -97,6 +97,28 @@ public sealed class UserHandler: Handler, IHandler
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"[{nameof(UserHandler)} Exception getting leaderboard. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
+            } else
+            if ((e.Path == "/users/profile") && (e.Method == HttpMethod.Get))
+            {
+                try
+                {
+                    string? authHeader = e.Context.Request.Headers["Authorization"];
+                    Session? session = Session.verifyToken(authHeader);
+                    User profile = new User(session);
+                    profile = profile.Get(session.UserName, session);
+
+
+                    e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["Profile"] = JsonSerializer.SerializeToNode(profile) });
+
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"[{nameof(MediaHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                }
+                catch (Exception ex)
+                {
+                    e.Respond(HttpStatusCode.InternalServerError, new JsonObject() { ["success"] = false, ["reason"] = ex.Message });
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"[{nameof(UserHandler)} Exception getting profile. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                }
             }
 
             else
