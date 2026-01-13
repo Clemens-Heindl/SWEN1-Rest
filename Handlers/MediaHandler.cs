@@ -181,6 +181,51 @@ public sealed class MediaHandler: Handler, IHandler
                     Console.WriteLine($"[{nameof(MediaHandler)} Exception viewing media ratings. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
             }
+            if ((e.Path == "/media/favorites") && (e.Method == HttpMethod.Post))
+            {
+                try
+                {
+                    string? authHeader = e.Context.Request.Headers["Authorization"];
+                    Session? session = Session.verifyToken(authHeader);
+                    int ID = e.Content?["id"]?.GetValue<int>() ?? 0;
+                    MediaEntry.Repo.Favorite(ID, session);
+
+
+                    e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "Media Entry favorited." });
+
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"[{nameof(MediaHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                }
+                catch (Exception ex)
+                {
+                    e.Respond(HttpStatusCode.InternalServerError, new JsonObject() { ["success"] = false, ["reason"] = ex.Message });
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"[{nameof(MediaHandler)} Exception favoriting media entry. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                }
+            } else
+            if ((e.Path == "/media/favorites") && (e.Method == HttpMethod.Delete))
+            {
+                try
+                {
+                    string? authHeader = e.Context.Request.Headers["Authorization"];
+                    Session? session = Session.verifyToken(authHeader);
+                    int ID = e.Content?["id"]?.GetValue<int>() ?? 0;
+                    MediaEntry.Repo.UnFavorite(ID, session);
+
+
+                    e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "Media Entry unfavorited." });
+
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"[{nameof(MediaHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                }
+                catch (Exception ex)
+                {
+                    e.Respond(HttpStatusCode.InternalServerError, new JsonObject() { ["success"] = false, ["reason"] = ex.Message });
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"[{nameof(MediaHandler)} Exception unfavoriting media entry. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                }
+            }
+
 
             else
             {

@@ -182,5 +182,54 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
 
         return rval;
     }
+    public void Favorite(int id, Session? session)
+    {
+        if (session != null)
+        {
+            String sql1 = "SELECT * FROM MEDIA WHERE ID = @i";
+            using var cmd1 = new NpgsqlCommand(sql1, _Cn);
+            cmd1.Parameters.AddWithValue("i", id);
+            var exists = cmd1.ExecuteScalar();
+            if (exists == null)
+            {
+                throw new InvalidOperationException("Media you are trying to favorite doesnt exist");
+            }
+
+
+            String sql = "INSERT INTO FAVORITES (USERNAME, MEDIA) VALUES (@u, @i)";
+            using var cmd = new NpgsqlCommand(sql, _Cn);
+            cmd.Parameters.AddWithValue("u", session.UserName);
+            cmd.Parameters.AddWithValue("i", id);
+            cmd.ExecuteNonQuery();
+            Console.WriteLine("MediaEntry favorited successfully!");
+
+
+        }
+        else
+        {
+            throw new InvalidOperationException("Invalid Session (favorite).");
+        }
+    }
+
+    public void UnFavorite(int id, Session? session)
+    {
+        if (session != null)
+        {
+
+
+            String sql = "DELETE FROM FAVORITES WHERE USERNAME = @u AND ID = @i";
+            using var cmd = new NpgsqlCommand(sql, _Cn);
+            cmd.Parameters.AddWithValue("u", session.UserName);
+            cmd.Parameters.AddWithValue("i", id);
+            cmd.ExecuteNonQuery();
+            Console.WriteLine("MediaEntry unfavorited successfully!");
+
+
+        }
+        else
+        {
+            throw new InvalidOperationException("Invalid Session (unfavorite).");
+        }
+    }
 
 }
