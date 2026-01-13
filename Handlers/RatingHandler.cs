@@ -1,8 +1,8 @@
-using System.Net;
-using System.Text.Json.Nodes;
-
-using Clemens.SWEN1.System;
 using Clemens.SWEN1.Server;
+using Clemens.SWEN1.System;
+using System.Net;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 
 
@@ -116,7 +116,34 @@ public sealed class RatingHandler: Handler, IHandler
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"[{nameof(RatingHandler)} Exception updating rating. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
-            } else
+            }
+            else
+            if ((e.Path == "/ratings") && (e.Method == HttpMethod.Get))
+            {
+                try
+
+                {
+                    string? authHeader = e.Context.Request.Headers["Authorization"];
+                    Session? session = Session.verifyToken(authHeader);
+                    IEnumerable<Rating> entries = Rating.Repo.RatingHistory(session);
+                    if (!entries.Any())
+                    {
+                        throw new InvalidOperationException("No ratings found");
+                    }
+
+                    e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["ratings"] = JsonSerializer.SerializeToNode(entries) });
+
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"[{nameof(RatingHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                }
+                catch (Exception ex)
+                {
+                    e.Respond(HttpStatusCode.InternalServerError, new JsonObject() { ["success"] = false, ["reason"] = ex.Message });
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"[{nameof(RatingHandler)} Exception viewing ratings. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                }
+            }
+            else
             if ((e.Path == "/ratings/confirm") && (e.Method == HttpMethod.Put))
             {
                 try

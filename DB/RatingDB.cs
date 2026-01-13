@@ -140,7 +140,7 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
     {
 
 
-        var sql = "SELECT OWNER, COMMENT, STARS, ENTRY FROM RATINGS WHERE ID = @i AND CONFIRMATION = true";
+        var sql = "SELECT OWNER, COMMENT, STARS, ENTRY FROM RATINGS WHERE ENTRY = @i AND CONFIRMATION = true";
         using var cmd = new NpgsqlCommand(sql, _Cn);
         cmd.Parameters.AddWithValue("i", ID);
         using var reader = cmd.ExecuteReader();
@@ -152,5 +152,26 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
         }
 
         return rval;
+    }
+    public IEnumerable<Rating> RatingHistory(Session? session)
+    {
+        if(session != null) { 
+            var sql = "SELECT OWNER, COMMENT, STARS, ENTRY FROM RATINGS WHERE OWNER = @i";
+            using var cmd = new NpgsqlCommand(sql, _Cn);
+            cmd.Parameters.AddWithValue("i", session.UserName);
+            using var reader = cmd.ExecuteReader();
+
+            List<Rating> rval = new List<Rating>();
+            while (reader.Read())
+            {
+                rval.Add(_CreateObject(reader));
+            }
+
+            return rval;
+            }
+        else
+        {
+            throw new InvalidOperationException("Invalid Session (RatingHistory)");
+        }
     }
 }
