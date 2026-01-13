@@ -436,6 +436,29 @@
 				"url": "http://localhost:12000/media/favorites"
 			},
 			"response": []
+		},
+		{
+			"name": "Rating History",
+			"id": "6229e72d-af96-44d5-89f5-664585cba708",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://localhost:12000/ratings"
+			},
+			"response": []
 		}
 	]
 }
