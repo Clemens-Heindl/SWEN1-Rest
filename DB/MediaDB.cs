@@ -195,6 +195,16 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
                 throw new InvalidOperationException("Media you are trying to favorite doesnt exist");
             }
 
+            String sql2 = "SELECT * FROM FAVORITES WHERE MEDIA = @i AND USERNAME = @u";
+            using var cmd2 = new NpgsqlCommand(sql2, _Cn);
+            cmd2.Parameters.AddWithValue("i", id);
+            cmd2.Parameters.AddWithValue("u", session.UserName);
+            var exists2 = cmd2.ExecuteScalar();
+            if (exists2 != null)
+            {
+                throw new InvalidOperationException("Media already favorited");
+            }
+
 
             String sql = "INSERT INTO FAVORITES (USERNAME, MEDIA) VALUES (@u, @i)";
             using var cmd = new NpgsqlCommand(sql, _Cn);
@@ -217,7 +227,7 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
         {
 
 
-            String sql = "DELETE FROM FAVORITES WHERE USERNAME = @u AND ID = @i";
+            String sql = "DELETE FROM FAVORITES WHERE USERNAME = @u AND MEDIA = @i";
             using var cmd = new NpgsqlCommand(sql, _Cn);
             cmd.Parameters.AddWithValue("u", session.UserName);
             cmd.Parameters.AddWithValue("i", id);
@@ -229,6 +239,34 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
         else
         {
             throw new InvalidOperationException("Invalid Session (unfavorite).");
+        }
+    }
+
+    public IEnumerable<MediaEntry> GetFavorites(Session? session)
+    {
+        if (session != null)
+        {
+
+
+            String sql = "SELECT MEDIA.ID, CREATOR, TITLE, MEDIATYPE, DESCRIPTION, RELEASEYEAR, AGERATING, GENRE FROM MEDIA JOIN FAVORITES ON MEDIA.ID = FAVORITES.MEDIA WHERE FAVORITES.USERNAME = @u";
+            using var cmd = new NpgsqlCommand(sql, _Cn);
+            cmd.Parameters.AddWithValue("u", session.UserName);
+            cmd.ExecuteNonQuery();
+            using var reader = cmd.ExecuteReader();
+
+            List<MediaEntry> rval = new List<MediaEntry>();
+            while (reader.Read())
+            {
+                rval.Add(_CreateObject(reader));
+            }
+
+            return rval;
+
+
+        }
+        else
+        {
+            throw new InvalidOperationException("Invalid Session (getFavorites).");
         }
     }
 
