@@ -69,7 +69,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"Clemens\",\r\n    \"fullname\": \"Clemens Heindl\",\r\n    \"email\": \"clemens@example.com\",\r\n    \"password\": \"123\"\r\n}",
+					"raw": "{\r\n    \"username\": \"Benni\",\r\n    \"fullname\": \"Benjamin Winkler\",\r\n    \"email\": \"benni@example.com\",\r\n    \"password\": \"1234\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
