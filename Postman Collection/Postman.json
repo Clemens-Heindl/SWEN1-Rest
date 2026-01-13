@@ -367,6 +367,29 @@
 				"url": "http://localhost:12000/users/profile"
 			},
 			"response": []
+		},
+		{
+			"name": "Favorite Media",
+			"id": "4246eec6-b4bf-4680-97c9-a07c81c134aa",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":2\r\n}"
+				},
+				"url": "http://localhost:12000/media/favorite"
+			},
+			"response": []
 		}
 	]
 }
