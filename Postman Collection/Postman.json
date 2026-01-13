@@ -390,6 +390,29 @@
 				"url": "http://localhost:12000/media/favorites"
 			},
 			"response": []
+		},
+		{
+			"name": "Unfavorite Media",
+			"id": "9ccea732-7f73-4d2d-a3da-94009105c73e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 22\r\n}"
+				},
+				"url": "http://localhost:12000/media/favorites"
+			},
+			"response": []
 		}
 	]
 }
