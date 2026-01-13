@@ -19,7 +19,7 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
 
     protected override MediaEntry _RefreshObject(IDataReader re, MediaEntry obj)
     {
-        obj.ID = re.GetInt32(0);
+        obj.ID = re.GetInt32(0); 
         obj.Creator = re.GetString(1);
         obj.Title = re.GetString(2);
         obj.MediaType = re.GetString(3);
@@ -275,22 +275,21 @@ public sealed class MediaDatabase: Database<MediaEntry>, IDatabase<MediaEntry>
         {
 
             //get favorite genre
-            String sql = "SELECT MEDIA.GENRE FROM RATINGS JOIN MEDIA ON RATINGS.ENTRY = MEDIA.ID WHERE RATINGS.OWNER = @u AND RATINGS.STARS >= 3 LIMIT 1";
+            String sql = "SELECT MEDIA.GENRE FROM RATINGS JOIN MEDIA ON RATINGS.ENTRY = MEDIA.ID WHERE RATINGS.OWNER = @u AND RATINGS.STARS >= 3 ORDER BY RATINGS.STARS";
             using var cmd = new NpgsqlCommand(sql, _Cn);
             cmd.Parameters.AddWithValue("u", session.UserName);
-            cmd.ExecuteNonQuery();
             var genre = cmd.ExecuteScalar();
             if(genre == null)
             {
                 throw new InvalidOperationException("No Ratings to base Recommendations on found");
             }
 
-            String sql2 = "SELECT DISTINCT MEDIA.ID, CREATOR, TITLE, MEDIATYPE, DESCRIPTION, RELEASEYEAR, AGERATING, GENRE FROM MEDIA JOIN RATINGS ON RATINGS.ENTRY = MEDIA.ID WHERE GENRE = @g AND RATINGS.STARS >= 3 AND RATINGS.OWNER != @u";
+            String sql2 = "SELECT MEDIA.ID, CREATOR, TITLE, MEDIATYPE, DESCRIPTION, RELEASEYEAR, AGERATING, GENRE FROM MEDIA JOIN RATINGS ON RATINGS.ENTRY = MEDIA.ID WHERE GENRE = @g AND RATINGS.STARS >= 3 AND RATINGS.OWNER != @u";
             using var cmd2 = new NpgsqlCommand(sql2, _Cn);
             cmd2.Parameters.AddWithValue("g", genre);
             cmd2.Parameters.AddWithValue("u", session.UserName);
             cmd2.ExecuteNonQuery();
-            using var reader = cmd.ExecuteReader();
+            using var reader = cmd2.ExecuteReader();
 
 
             List<MediaEntry> rval = new List<MediaEntry>();

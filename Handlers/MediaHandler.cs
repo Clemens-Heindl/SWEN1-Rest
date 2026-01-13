@@ -180,7 +180,7 @@ public sealed class MediaHandler: Handler, IHandler
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"[{nameof(MediaHandler)} Exception viewing media ratings. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
-            }
+            } else
             if ((e.Path == "/media/favorites") && (e.Method == HttpMethod.Post))
             {
                 try
@@ -202,7 +202,8 @@ public sealed class MediaHandler: Handler, IHandler
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"[{nameof(MediaHandler)} Exception favoriting media entry. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
-            } else
+            }
+            else
             if ((e.Path == "/media/favorites") && (e.Method == HttpMethod.Delete))
             {
                 try
@@ -224,7 +225,8 @@ public sealed class MediaHandler: Handler, IHandler
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"[{nameof(MediaHandler)} Exception unfavoriting media entry. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
-            } else
+            }
+            else
             if ((e.Path == "/media/favorites") && (e.Method == HttpMethod.Get))
             {
                 try
@@ -249,7 +251,8 @@ public sealed class MediaHandler: Handler, IHandler
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"[{nameof(MediaHandler)} Exception getting media favorites. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
-            }   else
+            }
+            else
             if ((e.Path == "/media/recommendation") && (e.Method == HttpMethod.Get))
             {
                 try
