@@ -176,11 +176,55 @@ public sealed class RatingHandler: Handler, IHandler
                     Console.WriteLine($"[{nameof(RatingHandler)} Exception confirming rating. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
             }
+            else
+            if ((e.Path == "/ratings/like") && (e.Method == HttpMethod.Post))
+            {
+                try
+
+                {
+                    string? authHeader = e.Context.Request.Headers["Authorization"];
+                    Session? session = Session.verifyToken(authHeader);
+                    int ID = e.Content?["id"]?.GetValue<int>() ?? 0;
+                    Rating.Repo.Like(ID, session);
+                    e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "Rating liked." });
+
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"[{nameof(RatingHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                }
+                catch (Exception ex)
+                {
+                    e.Respond(HttpStatusCode.InternalServerError, new JsonObject() { ["success"] = false, ["reason"] = ex.Message });
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"[{nameof(RatingHandler)} Exception liking rating. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                }
+            }
+            else
+            if ((e.Path == "/ratings/like") && (e.Method == HttpMethod.Delete))
+            {
+                try
+
+                {
+                    string? authHeader = e.Context.Request.Headers["Authorization"];
+                    Session? session = Session.verifyToken(authHeader);
+                    int ID = e.Content?["id"]?.GetValue<int>() ?? 0;
+                    Rating.Repo.UnLike(ID, session);
+                    e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["message"] = "Rating unliked." });
+
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"[{nameof(RatingHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                }
+                catch (Exception ex)
+                {
+                    e.Respond(HttpStatusCode.InternalServerError, new JsonObject() { ["success"] = false, ["reason"] = ex.Message });
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"[{nameof(RatingHandler)} Exception unliking rating. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                }
+            }
 
 
             else
             {
-                e.Respond(HttpStatusCode.BadRequest, new JsonObject() { ["success"] = false, ["reason"] = "Invalid media entry endpoint." });
+                e.Respond(HttpStatusCode.BadRequest, new JsonObject() { ["success"] = false, ["reason"] = "Invalid ratings endpoint." });
 
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"[{nameof(RatingHandler)} Invalid ratings endpoint.");

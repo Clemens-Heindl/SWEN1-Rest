@@ -174,4 +174,64 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
             throw new InvalidOperationException("Invalid Session (RatingHistory)");
         }
     }
+
+    public void Like(int id, Session? session)
+    {
+        if (session != null)
+        {
+            String sql1 = "SELECT * FROM RATINGS WHERE ID = @i";
+            using var cmd1 = new NpgsqlCommand(sql1, _Cn);
+            cmd1.Parameters.AddWithValue("i", id);
+            var exists = cmd1.ExecuteScalar();
+            if (exists == null)
+            {
+                throw new InvalidOperationException("Rating you are trying to like doesnt exist");
+            }
+
+            String sql2 = "SELECT * FROM LIKES WHERE RATING = @i AND USERNAME = @u";
+            using var cmd2 = new NpgsqlCommand(sql2, _Cn);
+            cmd2.Parameters.AddWithValue("i", id);
+            cmd2.Parameters.AddWithValue("u", session.UserName);
+            var exists2 = cmd2.ExecuteScalar();
+            if (exists2 != null)
+            {
+                throw new InvalidOperationException("Rating already liked");
+            }
+
+
+            String sql = "INSERT INTO LIKES (USERNAME, RATING) VALUES (@u, @i)";
+            using var cmd = new NpgsqlCommand(sql, _Cn);
+            cmd.Parameters.AddWithValue("u", session.UserName);
+            cmd.Parameters.AddWithValue("i", id);
+            cmd.ExecuteNonQuery();
+            Console.WriteLine("Rating liked successfully!");
+
+
+        }
+        else
+        {
+            throw new InvalidOperationException("Invalid Session (like).");
+        }
+    }
+
+    public void UnLike(int id, Session? session)
+    {
+        if (session != null)
+        {
+
+
+            String sql = "DELETE FROM LIKES WHERE USERNAME = @u AND RATING = @i";
+            using var cmd = new NpgsqlCommand(sql, _Cn);
+            cmd.Parameters.AddWithValue("u", session.UserName);
+            cmd.Parameters.AddWithValue("i", id);
+            cmd.ExecuteNonQuery();
+            Console.WriteLine("Rating unliked successfully!");
+
+
+        }
+        else
+        {
+            throw new InvalidOperationException("Invalid Session (unlike).");
+        }
+    }
 }
