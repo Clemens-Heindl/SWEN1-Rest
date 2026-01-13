@@ -408,7 +408,30 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": 22\r\n}"
+					"raw": "{\r\n    \"id\": 2\r\n}"
+				},
+				"url": "http://localhost:12000/media/favorites"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Favorites",
+			"id": "85936ad6-afa8-4449-b2e1-cf560aebad7b",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
 				},
 				"url": "http://localhost:12000/media/favorites"
 			},
