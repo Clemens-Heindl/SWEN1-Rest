@@ -482,6 +482,29 @@
 				"url": "http://localhost:12000/media/recommendation"
 			},
 			"response": []
+		},
+		{
+			"name": "Like Rating",
+			"id": "955b7d66-bd96-4c0d-aebb-1dbb36dbaacc",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":2\r\n}"
+				},
+				"url": "http://localhost:12000/ratings/like"
+			},
+			"response": []
 		}
 	]
 }
