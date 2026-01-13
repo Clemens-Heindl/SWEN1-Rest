@@ -505,6 +505,29 @@
 				"url": "http://localhost:12000/ratings/like"
 			},
 			"response": []
+		},
+		{
+			"name": "Remove Like",
+			"id": "f968b92b-3c5a-4972-82f4-8434a34e3fa4",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":2\r\n}"
+				},
+				"url": "http://localhost:12000/ratings/like"
+			},
+			"response": []
 		}
 	]
 }
