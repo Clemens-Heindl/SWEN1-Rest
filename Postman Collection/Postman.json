@@ -459,6 +459,29 @@
 				"url": "http://localhost:12000/ratings"
 			},
 			"response": []
+		},
+		{
+			"name": "Recommendation",
+			"id": "f288139a-ae3d-4a30-bc95-2e024b07a380",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://localhost:12000/media/recommendation"
+			},
+			"response": []
 		}
 	]
 }
