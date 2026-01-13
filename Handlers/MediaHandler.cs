@@ -249,8 +249,32 @@ public sealed class MediaHandler: Handler, IHandler
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"[{nameof(MediaHandler)} Exception getting media favorites. {e.Method.ToString()} {e.Path}: {ex.Message}");
                 }
-            }
+            }   else
+            if ((e.Path == "/media/recommendation") && (e.Method == HttpMethod.Get))
+            {
+                try
+                {
+                    string? authHeader = e.Context.Request.Headers["Authorization"];
+                    Session? session = Session.verifyToken(authHeader);
+                    IEnumerable<MediaEntry> entries = MediaEntry.Repo.GetRecommendations(session);
+                    if (!entries.Any())
+                    {
+                        throw new InvalidOperationException("No good Recommendations found");
+                    }
 
+
+                    e.Respond(HttpStatusCode.OK, new JsonObject() { ["success"] = true, ["Recommendation"] = JsonSerializer.SerializeToNode(entries) });
+
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"[{nameof(MediaHandler)} Handled {e.Method.ToString()} {e.Path}.");
+                }
+                catch (Exception ex)
+                {
+                    e.Respond(HttpStatusCode.InternalServerError, new JsonObject() { ["success"] = false, ["reason"] = ex.Message });
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"[{nameof(MediaHandler)} Exception getting recommendations. {e.Method.ToString()} {e.Path}: {ex.Message}");
+                }
+            }
 
             else
             {
