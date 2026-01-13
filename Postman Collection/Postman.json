@@ -69,7 +69,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"Clemens\",\r\n    \"fullname\": \"Clemens Heindl\",\r\n    \"email\": \"clemens@example.com\",\r\n    \"password\": \"123\"\r\n}",
+					"raw": "{\r\n    \"username\": \"Benni\",\r\n    \"fullname\": \"Benjamin Winkler\",\r\n    \"email\": \"benni@example.com\",\r\n    \"password\": \"1234\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -122,7 +122,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"type\": \"Game\",\r\n    \"title\": \"Minecraft\",\r\n    \"release\": 2009,\r\n    \"restriction\": 6,\r\n    \"genre\": \"Adventure\",\r\n    \"description\": \"The worlds greatest sandbox game\"\r\n}",
+					"raw": "{\r\n    \"type\": \"Game\",\r\n    \"title\": \"Unchartet 4\",\r\n    \"release\": 2016,\r\n    \"restriction\": 16,\r\n    \"genre\": \"Adventure\",\r\n    \"description\": \"Out of all games this is surely one of them\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -457,6 +457,75 @@
 					"raw": ""
 				},
 				"url": "http://localhost:12000/ratings"
+			},
+			"response": []
+		},
+		{
+			"name": "Recommendation",
+			"id": "f288139a-ae3d-4a30-bc95-2e024b07a380",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://localhost:12000/media/recommendation"
+			},
+			"response": []
+		},
+		{
+			"name": "Like Rating",
+			"id": "955b7d66-bd96-4c0d-aebb-1dbb36dbaacc",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":2\r\n}"
+				},
+				"url": "http://localhost:12000/ratings/like"
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Like",
+			"id": "f968b92b-3c5a-4972-82f4-8434a34e3fa4",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{auth-token}}"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":2\r\n}"
+				},
+				"url": "http://localhost:12000/ratings/like"
 			},
 			"response": []
 		}
