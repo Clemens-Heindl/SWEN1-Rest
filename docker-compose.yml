@@ -6,10 +6,14 @@ services:
     container_name: swen-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: swen-db
+      POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mysecretpassword
     ports:
       - "5432:5432"
     volumes:
+      - pgdata:/var/lib/postgresql/data
 
+volumes:
+  pgdata:
+    external: true
