@@ -79,7 +79,7 @@ public sealed class UserHandler: Handler, IHandler
                 {
                     string? authHeader = e.Context.Request.Headers["Authorization"];
                     Session? session = Session.verifyToken(authHeader);
-                    IEnumerable<User> entries = User.Repo.Leaderboard();
+                    IEnumerable<User> entries = User.Repo.GetLeaderboard();
                     if (!entries.Any())
                     {
                         throw new InvalidOperationException("No active users");

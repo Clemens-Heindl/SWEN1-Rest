@@ -125,7 +125,7 @@ public sealed class RatingHandler: Handler, IHandler
                 {
                     string? authHeader = e.Context.Request.Headers["Authorization"];
                     Session? session = Session.verifyToken(authHeader);
-                    IEnumerable<Rating> entries = Rating.Repo.RatingHistory(session);
+                    IEnumerable<Rating> entries = Rating.Repo.GetRatingHistory(session);
                     if (!entries.Any())
                     {
                         throw new InvalidOperationException("No ratings found");

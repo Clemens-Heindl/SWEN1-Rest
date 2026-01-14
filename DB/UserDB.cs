@@ -149,7 +149,7 @@ public sealed class UserDatabase: Database<User>, IDatabase<User>
         }
     }
 
-    public IEnumerable<User> Leaderboard()
+    public IEnumerable<User> GetLeaderboard()
     {
         var sql = "SELECT USERS.USERNAME, USERS.NAME, USERS.EMAIL, USERS.HADMIN, COUNT(MEDIA.ID) AS score FROM USERS JOIN MEDIA ON USERS.USERNAME = MEDIA.CREATOR "+
             "GROUP BY USERS.USERNAME, USERS.NAME, USERS.EMAIL, USERS.HADMIN ORDER BY score";

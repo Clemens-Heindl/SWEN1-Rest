@@ -153,7 +153,7 @@ public sealed class RatingDatabase: Database<Rating>, IDatabase<Rating>
 
         return rval;
     }
-    public IEnumerable<Rating> RatingHistory(Session? session)
+    public IEnumerable<Rating> GetRatingHistory(Session? session)
     {
         if(session != null) { 
             var sql = "SELECT OWNER, COMMENT, STARS, ENTRY FROM RATINGS WHERE OWNER = @i";
