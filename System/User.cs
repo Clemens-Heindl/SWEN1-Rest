@@ -23,7 +23,7 @@ public sealed class User: Atom, IAtom
     public User(Session? session = null)
     {
         _EditingSession = session;
-        _New = true;
+        _New = false;
     }
     public User()
     {
@@ -109,14 +109,11 @@ public sealed class User: Atom, IAtom
     {
         _EnsureAdminOrOwner(UserName);
 
-        // TODO: delete user from database
-
         _EndEdit();
     }
 
     public override void Refresh()
     {
-        // TODO: refresh user from database
         _EndEdit();
     }
 }

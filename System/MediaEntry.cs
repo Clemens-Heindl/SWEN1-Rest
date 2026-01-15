@@ -9,6 +9,8 @@ public sealed class MediaEntry: Atom, IAtom
 {
     private bool _New;
 
+    private int _year;
+
     private string _Creator = string.Empty;
 
     private Rating[]? _Ratings = null;
@@ -42,8 +44,9 @@ public sealed class MediaEntry: Atom, IAtom
     } = string.Empty;
 
     public int ReleaseYear {
-        get; set;
-    } = 0;
+        get => _year;
+        set => _year = Math.Clamp(value, 1900, 2100);
+    }
 
     public int AgeRestriction {
         get; set;
